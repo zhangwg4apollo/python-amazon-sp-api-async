@@ -1,5 +1,5 @@
 from sp_api.base.helpers import sp_endpoint
-from sp_api.base import Client, Marketplaces, ApiResponse
+from sp_api.base import Client, ApiResponse
 
 
 class Sellers(Client):
@@ -9,7 +9,7 @@ class Sellers(Client):
     """
 
     @sp_endpoint("/sellers/v1/marketplaceParticipations")
-    def get_marketplace_participation(self, **kwargs) -> ApiResponse:
+    async def get_marketplace_participation(self, **kwargs) -> ApiResponse:
         """
         get_marketplace_participation(self, **kwargs) -> ApiResponse
         Returns a list of marketplaces that the seller submitting the request can sell in and information about the seller's participation in those marketplaces.
@@ -27,7 +27,7 @@ class Sellers(Client):
         Examples:
             literal blocks::
 
-                res = Sellers().get_marketplace_participation()
+                res = await Sellers().get_marketplace_participation()
 
         Args:
             **kwargs:
@@ -36,10 +36,10 @@ class Sellers(Client):
             GetMarketplaceParticipationsResponse:
 
         """
-        return self._request(kwargs.pop("path"), add_marketplace=False)
+        return await self._request(kwargs.pop("path"), add_marketplace=False)
 
     @sp_endpoint("/sellers/v1/account")
-    def get_account(self, **kwargs) -> ApiResponse:
+    async def get_account(self, **kwargs) -> ApiResponse:
         """
         get_account(self, **kwargs) -> ApiResponse
         Returns information about a seller account and its marketplaces.
@@ -57,7 +57,7 @@ class Sellers(Client):
         Examples:
             literal blocks::
 
-                res = Sellers().get_account()
+                res = await Sellers().get_account()
 
         Args:
             **kwargs:
@@ -66,4 +66,4 @@ class Sellers(Client):
             GetAccountResponse:
 
         """
-        return self._request(kwargs.pop("path"), add_marketplace=False)
+        return await self._request(kwargs.pop("path"), add_marketplace=False)

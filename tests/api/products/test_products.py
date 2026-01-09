@@ -1,114 +1,127 @@
-import traceback
+import pytest
 
 from sp_api.api.products.products import Products
 from sp_api.api.products.products_definitions import GetListingOffersBatchRequest, ListingOffersRequest
-from sp_api.base import ApiResponse, Marketplaces, SellingApiBadRequestException
+from sp_api.base import ApiResponse, SellingApiBadRequestException
 
 
-def test_pricing_for_sku():
-    res = Products().get_product_pricing_for_skus([], MarketplaceId="ATVPDKIKX0DER")
-    assert res.payload[0].get('status') == 'Success'
+@pytest.mark.asyncio
+async def test_pricing_for_sku():
+    async with Products() as client:
+        res = await client.get_product_pricing_for_skus([], MarketplaceId="ATVPDKIKX0DER")
+        assert res.payload[0].get('status') == 'Success'
 
 
-def test_pricing_for_asin():
-    res = Products().get_product_pricing_for_asins([], MarketplaceId="ATVPDKIKX0DER")
-    assert res.payload[0].get('status') == 'Success'
+@pytest.mark.asyncio
+async def test_pricing_for_asin():
+    async with Products() as client:
+        res = await client.get_product_pricing_for_asins([], MarketplaceId="ATVPDKIKX0DER")
+        assert res.payload[0].get('status') == 'Success'
 
 
-def test_pricing_for_asin_expect_400():
-    try:
-        Products().get_product_pricing_for_asins(['TEST_CASE_400'], MarketplaceId='TEST_CASE_400')
-    except SellingApiBadRequestException:
-        pass
+@pytest.mark.asyncio
+async def test_pricing_for_asin_expect_400():
+    async with Products() as client:
+        try:
+            await client.get_product_pricing_for_asins(['TEST_CASE_400'], MarketplaceId='TEST_CASE_400')
+        except SellingApiBadRequestException:
+            pass
 
 
-def test_competitive_pricing_for_sku():
-    res = Products().get_competitive_pricing_for_skus([], MarketplaceId="ATVPDKIKX0DER")
-    assert res.payload[0].get('status') == 'Success'
+@pytest.mark.asyncio
+async def test_competitive_pricing_for_sku():
+    async with Products() as client:
+        res = await client.get_competitive_pricing_for_skus([], MarketplaceId="ATVPDKIKX0DER")
+        assert res.payload[0].get('status') == 'Success'
 
 
-def test_competitive_pricing_for_asin():
-    res = Products().get_competitive_pricing_for_asins([], MarketplaceId="ATVPDKIKX0DER")
-    assert res.payload[0].get('status') == 'Success'
+@pytest.mark.asyncio
+async def test_competitive_pricing_for_asin():
+    async with Products() as client:
+        res = await client.get_competitive_pricing_for_asins([], MarketplaceId="ATVPDKIKX0DER")
+        assert res.payload[0].get('status') == 'Success'
 
 
-def test_get_item_offers_batch():
-    res = Products().get_item_offers_batch(requests_=[
-        {
-            "uri": "/products/pricing/v0/items/B000P6Q7MY/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B001Q3KU9Q/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B007Z07UK6/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B000OQA3N4/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B07PTMKYS7/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B001PYUTII/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B00505DW2I/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B00CGZQU42/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B01LY2ZYRF/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        },
-        {
-            "uri": "/products/pricing/v0/items/B00KFRNZY6/offers",
-            "method": "GET",
-            "MarketplaceId": "ATVPDKIKX0DER",
-            "ItemCondition": "New",
-            "CustomerType": "Consumer"
-        }
-    ])
-    assert res.errors is None
-    assert isinstance(res, ApiResponse)
+@pytest.mark.asyncio
+async def test_get_item_offers_batch():
+    async with Products() as client:
+        res = await client.get_item_offers_batch(requests_=[
+            {
+                "uri": "/products/pricing/v0/items/B000P6Q7MY/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B001Q3KU9Q/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B007Z07UK6/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B000OQA3N4/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B07PTMKYS7/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B001PYUTII/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B00505DW2I/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B00CGZQU42/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B01LY2ZYRF/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            },
+            {
+                "uri": "/products/pricing/v0/items/B00KFRNZY6/offers",
+                "method": "GET",
+                "MarketplaceId": "ATVPDKIKX0DER",
+                "ItemCondition": "New",
+                "CustomerType": "Consumer"
+            }
+        ])
+        assert res.errors is None
+        assert isinstance(res, ApiResponse)
 
-def test_get_listing_offers_batch():
+@pytest.mark.asyncio
+async def test_get_listing_offers_batch():
     reqs = [
         ListingOffersRequest(
             uri="/products/pricing/v0/listings/GC-QTMS-SV2I/offers",
@@ -138,6 +151,7 @@ def test_get_listing_offers_batch():
     ]
 
     batch_req = GetListingOffersBatchRequest(reqs)
-    res = Products().get_listing_offers_batch(batch_req)
-    assert res.errors is None
-    assert isinstance(res, ApiResponse)
+    async with Products() as client:
+        res = await client.get_listing_offers_batch(batch_req)
+        assert res.errors is None
+        assert isinstance(res, ApiResponse)

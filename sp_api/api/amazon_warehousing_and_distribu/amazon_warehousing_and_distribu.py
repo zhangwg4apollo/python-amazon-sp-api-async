@@ -1,5 +1,4 @@
 import enum
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -29,7 +28,7 @@ class AmazonWarehousingAndDistribution(Client):
         super().__init__(*args, **{**kwargs, "version": self.version})
 
     @sp_endpoint("/awd/<version>/inboundShipments/{}", method="GET")
-    def get_inbound_shipment(self, shipmentId, **kwargs) -> ApiResponse:
+    async def get_inbound_shipment(self, shipmentId, **kwargs) -> ApiResponse:
         """
                 get_inbound_shipment(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -52,12 +51,12 @@ class AmazonWarehousingAndDistribution(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId), params=kwargs
         )
 
     @sp_endpoint("/awd/<version>/inboundShipments", method="GET")
-    def list_inbound_shipments(self, **kwargs) -> ApiResponse:
+    async def list_inbound_shipments(self, **kwargs) -> ApiResponse:
         """
                 list_inbound_shipments(self, **kwargs) -> ApiResponse
 
@@ -92,10 +91,10 @@ class AmazonWarehousingAndDistribution(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/awd/<version>/inventory", method="GET")
-    def list_inventory(self, **kwargs) -> ApiResponse:
+    async def list_inventory(self, **kwargs) -> ApiResponse:
         """
                 list_inventory(self, **kwargs) -> ApiResponse
 
@@ -126,4 +125,4 @@ class AmazonWarehousingAndDistribution(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)

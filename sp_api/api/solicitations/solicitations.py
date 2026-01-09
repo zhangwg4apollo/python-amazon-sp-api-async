@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -12,7 +11,7 @@ class Solicitations(Client):
     """
 
     @sp_endpoint("/solicitations/v1/orders/{}", method="GET")
-    def get_solicitation_actions_for_order(
+    async def get_solicitation_actions_for_order(
         self, amazonOrderId, **kwargs
     ) -> ApiResponse:
         """
@@ -38,7 +37,7 @@ class Solicitations(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), amazonOrderId), params=kwargs
         )
 
@@ -46,7 +45,7 @@ class Solicitations(Client):
         "/solicitations/v1/orders/{}/solicitations/productReviewAndSellerFeedback",
         method="POST",
     )
-    def create_product_review_and_seller_feedback_solicitation(
+    async def create_product_review_and_seller_feedback_solicitation(
         self, amazonOrderId, **kwargs
     ) -> ApiResponse:
         """
@@ -72,6 +71,6 @@ class Solicitations(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), amazonOrderId), params=kwargs
         )

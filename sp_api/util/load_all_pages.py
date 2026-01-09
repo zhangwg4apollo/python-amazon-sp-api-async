@@ -1,4 +1,5 @@
-import time
+import asyncio
+import inspect
 
 
 def make_sleep_time(rate_limit, use_rate_limit_header, throttle_by_seconds):
@@ -16,6 +17,7 @@ def load_all_pages(
 ):
     """
     Load all pages if a next token is returned
+    Supports both sync and async functions.
 
     Args:
         throttle_by_seconds: float
@@ -24,32 +26,58 @@ def load_all_pages(
         extras: additional data to be sent with NextToken, e.g `dict(QueryType='NEXT_TOKEN')` for `FulfillmentInbound`
         next_token_only: remove all other params from kwargs, required for reports API
     Returns:
-        Transforms the function in a generator, returning all pages
+        Transforms the function in a generator (or async generator for async functions), returning all pages
     """
     if not extras:
         extras = {}
 
     def decorator(function):
-        def wrapper(*args, **kwargs):
-            done = False
-            while not done:
-                res = function(*args, **kwargs)
+        is_async = inspect.iscoroutinefunction(function)
 
-                yield res
-                if res.next_token:
-                    sleep_time = make_sleep_time(
-                        res.rate_limit, use_rate_limit_header, throttle_by_seconds
-                    )
-                    if sleep_time > 0:
-                        time.sleep(sleep_time)
-                    if next_token_only:
-                        kwargs = {next_token_param: res.next_token}
+        if is_async:
+            async def async_wrapper(*args, **kwargs):
+                done = False
+                while not done:
+                    res = await function(*args, **kwargs)
+
+                    yield res
+                    if res.next_token:
+                        sleep_time = make_sleep_time(
+                            res.rate_limit, use_rate_limit_header, throttle_by_seconds
+                        )
+                        if sleep_time > 0:
+                            await asyncio.sleep(sleep_time)
+                        if next_token_only:
+                            kwargs = {next_token_param: res.next_token}
+                        else:
+                            kwargs.update({next_token_param: res.next_token, **extras})
                     else:
-                        kwargs.update({next_token_param: res.next_token, **extras})
-                else:
-                    done = True
+                        done = True
 
-        wrapper.__doc__ = function.__doc__
-        return wrapper
+            async_wrapper.__doc__ = function.__doc__
+            return async_wrapper
+        else:
+            def sync_wrapper(*args, **kwargs):
+                done = False
+                while not done:
+                    res = function(*args, **kwargs)
+
+                    yield res
+                    if res.next_token:
+                        sleep_time = make_sleep_time(
+                            res.rate_limit, use_rate_limit_header, throttle_by_seconds
+                        )
+                        if sleep_time > 0:
+                            import time
+                            time.sleep(sleep_time)
+                        if next_token_only:
+                            kwargs = {next_token_param: res.next_token}
+                        else:
+                            kwargs.update({next_token_param: res.next_token, **extras})
+                    else:
+                        done = True
+
+            sync_wrapper.__doc__ = function.__doc__
+            return sync_wrapper
 
     return decorator

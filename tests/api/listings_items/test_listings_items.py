@@ -1,42 +1,53 @@
+import pytest
 from sp_api.api import ListingsItems
 from sp_api.base import Marketplaces
 
 
-def test_get_listings_item():
-    res = ListingsItems().get_listings_item('xxx', 'xxx')
-    assert res is not None
+@pytest.mark.asyncio
+async def test_get_listings_item():
+    async with ListingsItems() as client:
+        res = await client.get_listings_item('xxx', 'xxx')
+        assert res is not None
 
-def test_search_listings_items():
-    res = ListingsItems().search_listings_items('xxx')
-    assert res is not None
-
-
-def test_put_listings_item():
-    res = ListingsItems().put_listings_item('xxx', 'xxx', body={
-              "productType": "string",
-              "requirements": "LISTING",
-              "attributes": {},
-
-            }, marketplaceIds=[Marketplaces.US.marketplace_id])
-    assert res('status') == 'ACCEPTED'
+@pytest.mark.asyncio
+async def test_search_listings_items():
+    async with ListingsItems() as client:
+        res = await client.search_listings_items('xxx')
+        assert res is not None
 
 
-def test_patch_listings_item():
-    res = ListingsItems().patch_listings_item('xxx', 'xxx', body={
-              "productType": "string",
-              "patches": [
-                {
-                  "op": "add",
-                  "path": "string",
-                  "value": [
-                    {}
+@pytest.mark.asyncio
+async def test_put_listings_item():
+    async with ListingsItems() as client:
+        res = await client.put_listings_item('xxx', 'xxx', body={
+                  "productType": "string",
+                  "requirements": "LISTING",
+                  "attributes": {},
+
+                }, marketplaceIds=[Marketplaces.US.marketplace_id])
+        assert res('status') == 'ACCEPTED'
+
+
+@pytest.mark.asyncio
+async def test_patch_listings_item():
+    async with ListingsItems() as client:
+        res = await client.patch_listings_item('xxx', 'xxx', body={
+                  "productType": "string",
+                  "patches": [
+                    {
+                      "op": "add",
+                      "path": "string",
+                      "value": [
+                        {}
+                      ]
+                    }
                   ]
-                }
-              ]
-            })
-    assert res('status') == 'ACCEPTED'
+                })
+        assert res('status') == 'ACCEPTED'
 
 
-def test_delete_listings_item():
-    res = ListingsItems().delete_listings_item('xxx', 'xxx')
-    assert res('status') == 'ACCEPTED'
+@pytest.mark.asyncio
+async def test_delete_listings_item():
+    async with ListingsItems() as client:
+        res = await client.delete_listings_item('xxx', 'xxx')
+        assert res('status') == 'ACCEPTED'

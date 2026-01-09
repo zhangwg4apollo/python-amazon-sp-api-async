@@ -4,8 +4,10 @@ from sp_api.api.shipping.shippingV2 import Shipping, AmznShippingBusiness
 from sp_api.base import SellingApiBadRequestException
 
 
-def test_get_rates():
-    res = Shipping(amzn_shipping_business=AmznShippingBusiness.UK).get_rates(
+@pytest.mark.asyncio
+async def test_get_rates():
+    async with Shipping(amzn_shipping_business=AmznShippingBusiness.UK) as client:
+        res = await client.get_rates(
         **{
             "shipTo": {
                 "name": "Arlene Purdy",
@@ -63,76 +65,88 @@ def test_get_rates():
             },
             "shipmentType": "FORWARD",
         }
-    )
-    assert res.errors is None
-    assert res.payload.get('requestToken') is not None
-    assert len(res.payload.get('rates')) > 0
+        )
+        assert res.errors is None
+        assert res.payload.get('requestToken') is not None
+        assert len(res.payload.get('rates')) > 0
 
 
-def test_get_additional_inputs_empty():
-    res = Shipping().get_additional_inputs(
+@pytest.mark.asyncio
+async def test_get_additional_inputs_empty():
+    async with Shipping() as client:
+        res = await client.get_additional_inputs(
         **{
             "requestToken": "amzn1.rq.123456789.101",
             "rateId": "122324234543535321345436534321423423523452345"
         }
-    )
-    assert res.errors is None
-    assert res.payload == {}
+        )
+        assert res.errors is None
+        assert res.payload == {}
 
 
-def test_get_additional_inputs_invalid():
-    try:
-        res = Shipping().get_additional_inputs(
+@pytest.mark.asyncio
+async def test_get_additional_inputs_invalid():
+    async with Shipping() as client:
+        try:
+            res = await client.get_additional_inputs(
             **{
                 "requestToken": "null",
                 "rateId": "2314346237423894905834905890346890789075"
             }
-        )
-    except SellingApiBadRequestException as br:
-        assert br.code == 400
-        assert type(br) == SellingApiBadRequestException
-        assert br.error[0]["details"] == "RequestToken cannot be null"
+            )
+        except SellingApiBadRequestException as br:
+            assert br.code == 400
+            assert type(br) == SellingApiBadRequestException
+            assert br.error[0]["details"] == "RequestToken cannot be null"
 
 
-def test_get_tracking():
-    res = Shipping().get_tracking(
+@pytest.mark.asyncio
+async def test_get_tracking():
+    async with Shipping() as client:
+        res = await client.get_tracking(
         **{
             "trackingId": "23AA47DE2B3B6",
             "carrierId": "AMZN_UK",
         }
-    )
-    assert res.errors is None
-    assert res.payload.get("trackingId") == "23AA47DE2B3B6"
-    assert res.payload.get("summary").get("status") == "Delivered"
-    assert len(res.payload.get("eventHistory")) > 0
-
-
-def test_cancel_shipment_not_found():
-    try:
-        res = Shipping().cancel_shipment("TEST_CASE_400")
-        assert res.errors is None
-    except SellingApiBadRequestException as br:
-        assert br.code == 400
-        assert type(br) == SellingApiBadRequestException
-        assert br.error[0]["details"] == "Shipment not found for specified shipmentId"
-
-
-def test_get_shipment_documents():
-    try:
-        res = Shipping().get_shipment_documents(
-            "445454-3232-3232",
-            packageClientReferenceId="ASUSDI-45343854"
         )
         assert res.errors is None
-    except SellingApiBadRequestException as br:
-        assert br.code == 400
-        assert type(br) == SellingApiBadRequestException
-        assert br.error[0]["details"] == "Shipment not found for specified shipmentId"
+        assert res.payload.get("trackingId") == "23AA47DE2B3B6"
+        assert res.payload.get("summary").get("status") == "Delivered"
+        assert len(res.payload.get("eventHistory")) > 0
 
 
-def test_purchase_shipment():
-    try:
-        res = Shipping().purchase_shipment(
+@pytest.mark.asyncio
+async def test_cancel_shipment_not_found():
+    async with Shipping() as client:
+        try:
+            res = await client.cancel_shipment("TEST_CASE_400")
+            assert res.errors is None
+        except SellingApiBadRequestException as br:
+            assert br.code == 400
+            assert type(br) == SellingApiBadRequestException
+            assert br.error[0]["details"] == "Shipment not found for specified shipmentId"
+
+
+@pytest.mark.asyncio
+async def test_get_shipment_documents():
+    async with Shipping() as client:
+        try:
+            res = await client.get_shipment_documents(
+            "445454-3232-3232",
+            packageClientReferenceId="ASUSDI-45343854"
+            )
+            assert res.errors is None
+        except SellingApiBadRequestException as br:
+            assert br.code == 400
+            assert type(br) == SellingApiBadRequestException
+            assert br.error[0]["details"] == "Shipment not found for specified shipmentId"
+
+
+@pytest.mark.asyncio
+async def test_purchase_shipment():
+    async with Shipping() as client:
+        try:
+            res = await client.purchase_shipment(
             **{
                 "requestToken": "amzn1.rq.123456789.101",
                 "rateId": "122324234543535321345436534321423423523452345",
@@ -149,16 +163,18 @@ def test_purchase_shipment():
                     "requestedDocumentTypes": ["LABEL"]
                 }
             }
-        )
-        assert res.errors is None
-    except SellingApiBadRequestException as br:
-        assert br.code == 400
-        assert type(br) == SellingApiBadRequestException
-        assert br.error[0]["details"] == "Request not found for specified requestToken"
+            )
+            assert res.errors is None
+        except SellingApiBadRequestException as br:
+            assert br.code == 400
+            assert type(br) == SellingApiBadRequestException
+            assert br.error[0]["details"] == "Request not found for specified requestToken"
 
 
-def test_submit_ndr_feedback():
-    res = Shipping().submit_ndr_feedback(
+@pytest.mark.asyncio
+async def test_submit_ndr_feedback():
+    async with Shipping() as client:
+        res = await client.submit_ndr_feedback(
         **{
             "trackingId": "TEST_CASE_200",
             "ndrAction": "RESCHEDULE",
@@ -167,23 +183,27 @@ def test_submit_ndr_feedback():
                 "additionalAddressNotes": "string"
             }
         }
-    )
-    assert res.errors is None
+        )
+        assert res.errors is None
 
 
-def test_get_access_points():
-    res = Shipping().get_access_points(
+@pytest.mark.asyncio
+async def test_get_access_points():
+    async with Shipping() as client:
+        res = await client.get_access_points(
         **{
             "accessPointTypes": "HELIX",
             "countryCode": "UK",
             "postalCode": "EX332JL"
         }
-    )
-    assert res.errors is None
+        )
+        assert res.errors is None
 
 
-def test_one_click_shipment():
-    res = Shipping(amzn_shipping_business=AmznShippingBusiness.UK).one_click_shipment(
+@pytest.mark.asyncio
+async def test_one_click_shipment():
+    async with Shipping(amzn_shipping_business=AmznShippingBusiness.UK) as client:
+        res = await client.one_click_shipment(
         **{
             "shipTo": {
                 "name": "Arlene Purdy",
@@ -255,8 +275,8 @@ def test_one_click_shipment():
                 "serviceId": ["SWA-UK-PREM"]
             },
         }
-    )
-    assert res.errors is None
-    assert res.payload.get('shipmentId')
-    assert res.payload.get('packageDocumentDetails')[0]['trackingId']
-    assert len(res.payload.get('packageDocumentDetails')[0]['packageDocuments']) > 0
+        )
+        assert res.errors is None
+        assert res.payload.get('shipmentId')
+        assert res.payload.get('packageDocumentDetails')[0]['trackingId']
+        assert len(res.payload.get('packageDocumentDetails')[0]['packageDocuments']) > 0

@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class ListingsRestrictions(Client):
@@ -13,7 +12,7 @@ class ListingsRestrictions(Client):
     """
 
     @sp_endpoint("/listings/2021-08-01/restrictions", method="GET")
-    def get_listings_restrictions(self, **kwargs) -> ApiResponse:
+    async def get_listings_restrictions(self, **kwargs) -> ApiResponse:
         """
         get_listings_restrictions(self, **kwargs) -> ApiResponse
 
@@ -32,4 +31,4 @@ class ListingsRestrictions(Client):
             ApiResponse
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)

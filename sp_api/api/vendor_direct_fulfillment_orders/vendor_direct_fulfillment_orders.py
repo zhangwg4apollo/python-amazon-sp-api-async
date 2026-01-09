@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -12,7 +11,7 @@ class VendorDirectFulfillmentOrders(Client):
     """
 
     @sp_endpoint("/vendor/directFulfillment/orders/v1/purchaseOrders", method="GET")
-    def get_orders(self, **kwargs) -> ApiResponse:
+    async def get_orders(self, **kwargs) -> ApiResponse:
         """
         get_orders(self, **kwargs) -> ApiResponse
 
@@ -42,10 +41,10 @@ class VendorDirectFulfillmentOrders(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/vendor/directFulfillment/orders/v1/purchaseOrders/{}", method="GET")
-    def get_order(self, purchaseOrderNumber, **kwargs) -> ApiResponse:
+    async def get_order(self, purchaseOrderNumber, **kwargs) -> ApiResponse:
         """
         get_order(self, purchaseOrderNumber, **kwargs) -> ApiResponse
 
@@ -68,12 +67,12 @@ class VendorDirectFulfillmentOrders(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), purchaseOrderNumber), params=kwargs
         )
 
     @sp_endpoint("/vendor/directFulfillment/orders/v1/acknowledgements", method="POST")
-    def submit_acknowledgement(self, **kwargs) -> ApiResponse:
+    async def submit_acknowledgement(self, **kwargs) -> ApiResponse:
         """
         submit_acknowledgement(self, **kwargs) -> ApiResponse
 
@@ -192,4 +191,4 @@ class VendorDirectFulfillmentOrders(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)

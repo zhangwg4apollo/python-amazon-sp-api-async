@@ -1,4 +1,3 @@
-import urllib.parse
 from io import BytesIO, StringIO
 from typing import Union, BinaryIO, TextIO
 
@@ -14,7 +13,7 @@ class DataKiosk(Client):
     """
 
     @sp_endpoint("/dataKiosk/2023-11-15/queries", method="GET")
-    def get_queries(self, **kwargs) -> ApiResponse:
+    async def get_queries(self, **kwargs) -> ApiResponse:
         """
         get_queries(self, **kwargs) -> ApiResponse
 
@@ -48,10 +47,10 @@ class DataKiosk(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
 
     @sp_endpoint("/dataKiosk/2023-11-15/queries", method="POST")
-    def create_query(self, query, pagination_token=None, **kwargs) -> ApiResponse:
+    async def create_query(self, query, pagination_token=None, **kwargs) -> ApiResponse:
         """
         create_query(self, query, pagination_token=None, **kwargs) -> ApiResponse
 
@@ -82,10 +81,10 @@ class DataKiosk(Client):
         kwargs["query"] = query
         if pagination_token:
             kwargs["paginationToken"] = pagination_token
-        return self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
 
     @sp_endpoint("/dataKiosk/2023-11-15/queries/{}", method="DELETE")
-    def cancel_query(self, query_id, **kwargs) -> ApiResponse:
+    async def cancel_query(self, query_id, **kwargs) -> ApiResponse:
         """
         cancel_query(self, queryId, **kwargs) -> ApiResponse
 
@@ -110,14 +109,14 @@ class DataKiosk(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), query_id),
             data=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/dataKiosk/2023-11-15/queries/{}", method="GET")
-    def get_query(self, query_id, **kwargs) -> ApiResponse:
+    async def get_query(self, query_id, **kwargs) -> ApiResponse:
         """
         get_query(self, queryId, **kwargs) -> ApiResponse
 
@@ -142,14 +141,14 @@ class DataKiosk(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), query_id),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/dataKiosk/2023-11-15/documents/{}", method="GET")
-    def get_document(
+    async def get_document(
         self,
         document_id,
         download: bool = False,
@@ -184,18 +183,14 @@ class DataKiosk(Client):
             ApiResponse:
         """
 
-        res = self._request(
+        res = await self._request(
             fill_query_params(kwargs.pop("path"), document_id),
             params=kwargs,
             add_marketplace=False,
         )
         if download or file or ("decrypt" in kwargs and kwargs["decrypt"]):
-            import requests
-
-            document_response = requests.get(
+            document_response = await self._client.get(
                 res.payload.get("documentUrl"),
-                proxies=self.proxies,
-                verify=self.verify,
             )
             document = document_response.content
             if download:

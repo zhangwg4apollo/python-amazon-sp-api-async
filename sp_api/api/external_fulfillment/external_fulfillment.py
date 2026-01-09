@@ -12,7 +12,7 @@ class ExternalFulfillment(Client):
     """
 
     @sp_endpoint("/externalFulfillment/2024-09-11/shipments", method="GET")
-    def get_shipments(self, **kwargs) -> ApiResponse:
+    async def get_shipments(self, **kwargs) -> ApiResponse:
         """
         get_shipments(self, **kwargs) -> ApiResponse
 
@@ -40,10 +40,10 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/externalFulfillment/2024-09-11/shipments/{}", method="GET")
-    def get_shipment(self, shipmentId, **kwargs) -> ApiResponse:
+    async def get_shipment(self, shipmentId, **kwargs) -> ApiResponse:
         """
         get_shipment(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -65,14 +65,14 @@ class ExternalFulfillment(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}", method="POST")
-    def process_shipment(self, shipmentId, operation, **kwargs) -> ApiResponse:
+    async def process_shipment(self, shipmentId, operation, **kwargs) -> ApiResponse:
         """
         process_shipment(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -108,7 +108,7 @@ class ExternalFulfillment(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             params={"operation": operation},
             data=kwargs,
@@ -117,7 +117,7 @@ class ExternalFulfillment(Client):
 
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/packages", method="POST")
-    def create_packages(self, shipmentId, **kwargs) -> ApiResponse:
+    async def create_packages(self, shipmentId, **kwargs) -> ApiResponse:
         """
         create_packages(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -176,14 +176,14 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             data=kwargs,
             add_marketplace=False
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/packages/{}", method="PUT")
-    def update_package(self, shipmentId, packageId, **kwargs) -> ApiResponse:
+    async def update_package(self, shipmentId, packageId, **kwargs) -> ApiResponse:
         """
         update_package(self, shipmentId, packageId, **kwargs) -> ApiResponse
 
@@ -243,14 +243,14 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId, packageId),
             data=kwargs,
             add_marketplace=False
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/packages/{}", method="PATCH")
-    def update_package_status(self, shipmentId, packageId, **kwargs) -> ApiResponse:
+    async def update_package_status(self, shipmentId, packageId, **kwargs) -> ApiResponse:
         """
         update_package_status(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -285,7 +285,7 @@ class ExternalFulfillment(Client):
             params["status"] = kwargs.get("status")
 
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId, packageId),
             params=params,
             data=kwargs,
@@ -293,7 +293,7 @@ class ExternalFulfillment(Client):
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/invoice", method="POST")
-    def generate_invoice(self, shipmentId, **kwargs) -> ApiResponse:
+    async def generate_invoice(self, shipmentId, **kwargs) -> ApiResponse:
         """
         generate_invoice(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -316,14 +316,14 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             data=kwargs,
             add_marketplace=False
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/invoice", method="GET")
-    def retrieve_invoice(self, shipmentId, **kwargs) -> ApiResponse:
+    async def retrieve_invoice(self, shipmentId, **kwargs) -> ApiResponse:
         """
         retrieve_invoice(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -347,14 +347,14 @@ class ExternalFulfillment(Client):
 
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             params=kwargs,
             add_marketplace=False
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shippingOptions", method="GET")
-    def retrieve_shipping_options(self, shipmentId, packageId, **kwargs) -> ApiResponse:
+    async def retrieve_shipping_options(self, shipmentId, packageId, **kwargs) -> ApiResponse:
         """
         retrieve_shipping_options(self, shipmentId, packageId, **kwargs) -> ApiResponse
 
@@ -382,10 +382,10 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
         params = {"shipmentId": shipmentId, "packageId": packageId}
-        return self._request(kwargs.pop("path"), params=params, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), params=params, add_marketplace=False)
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/shipLabels", method="PUT")
-    def generate_ship_labels(self, shipmentId, operation, **kwargs) -> ApiResponse:
+    async def generate_ship_labels(self, shipmentId, operation, **kwargs) -> ApiResponse:
         """
         generate_ship_labels(self, shipmentId, operation, **kwargs) -> ApiResponse
 
@@ -423,7 +423,7 @@ class ExternalFulfillment(Client):
         if "shippingOptionId" in kwargs:
             params["shippingOptionId"] = kwargs.pop("shippingOptionId")
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             params=params,
             data=kwargs,
@@ -431,7 +431,7 @@ class ExternalFulfillment(Client):
         )
 
     @sp_endpoint("/externalFulfillment/shipments/2021-01-06/shipments/{}/packages/{}/shipLabel", method="GET")
-    def retrieve_ship_label(self, shipmentId, packageId, **kwargs) -> ApiResponse:
+    async def retrieve_ship_label(self, shipmentId, packageId, **kwargs) -> ApiResponse:
         """
         retrieve_ship_label(self, shipmentId, packageId, **kwargs) -> ApiResponse
 
@@ -455,14 +455,14 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId, packageId),
             params=kwargs,
             add_marketplace=False
         )
 
     @sp_endpoint("/externalFulfillment/returns/2021-08-19/returns", method="GET")
-    def list_returns(self, **kwargs) -> ApiResponse:
+    async def list_returns(self, **kwargs) -> ApiResponse:
         """
         list_returns(self, **kwargs) -> ApiResponse
 
@@ -496,10 +496,10 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
 
     @sp_endpoint("/externalFulfillment/returns/2021-08-19/returns/{}", method="GET")
-    def get_return(self, returnId, **kwargs) -> ApiResponse:
+    async def get_return(self, returnId, **kwargs) -> ApiResponse:
         """
         get_return(self, returnId, **kwargs) -> ApiResponse
 
@@ -521,14 +521,14 @@ class ExternalFulfillment(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), returnId),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/externalFulfillment/returns/2021-08-19/returns/{}", method="PATCH")
-    def process_return_item(self, returnId, **kwargs) -> ApiResponse:
+    async def process_return_item(self, returnId, **kwargs) -> ApiResponse:
         """
         process_return_item(self, returnId, **kwargs) -> ApiResponse
 
@@ -570,7 +570,7 @@ class ExternalFulfillment(Client):
         else:
             headers["x-amzn-idempotency-token"] = str(uuid.uuid4())
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), returnId),
             data=kwargs,
             headers=headers,
@@ -578,7 +578,7 @@ class ExternalFulfillment(Client):
         )
 
     @sp_endpoint("/externalFulfillment/inventory/2021-01-06/locations/{}/skus/{}", method="GET")
-    def get_inventory(self, locationId, skuId, **kwargs) -> ApiResponse:
+    async def get_inventory(self, locationId, skuId, **kwargs) -> ApiResponse:
         """
         get_inventory(self, locationId, skuId, **kwargs) -> ApiResponse
 
@@ -601,14 +601,14 @@ class ExternalFulfillment(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), locationId, skuId),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/externalFulfillment/inventory/2021-01-06/locations/{}/skus/{}", method="PUT")
-    def update_inventory(self, locationId, skuId, quantity, **kwargs) -> ApiResponse:
+    async def update_inventory(self, locationId, skuId, quantity, **kwargs) -> ApiResponse:
         """
         update_inventory(self, locationId, skuId, quantity, **kwargs) -> ApiResponse
 
@@ -642,14 +642,14 @@ class ExternalFulfillment(Client):
         if "if_unmodified_since" in kwargs:
             headers["If-Unmodified-Since"] = kwargs.pop("if_unmodified_since")
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), locationId, skuId),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/externalFulfillment/inventory/2024-09-11/inventories", method="POST")
-    def batch_inventory(self, **kwargs) -> ApiResponse:
+    async def batch_inventory(self, **kwargs) -> ApiResponse:
         """
         batch_inventory(self, **kwargs) -> ApiResponse
 
@@ -699,7 +699,7 @@ class ExternalFulfillment(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"),
             data=kwargs,
             add_marketplace=False,

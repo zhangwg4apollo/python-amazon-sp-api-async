@@ -1,4 +1,5 @@
-import time
+import asyncio
+import inspect
 
 
 def retry(exception_classes=None, tries=10, delay=5, rate=1.3):
@@ -6,6 +7,7 @@ def retry(exception_classes=None, tries=10, delay=5, rate=1.3):
     retry(exception_classes=None, tries=10, delay=5, rate=1.3)
 
     Retry a call against an endpoint <tries> time
+    Supports both sync and async functions.
 
 
     Args:
@@ -23,28 +25,55 @@ def retry(exception_classes=None, tries=10, delay=5, rate=1.3):
     tries_counter = {"count": 1, "last_delay": delay}
 
     def decorator(function):
-        def wrapper(*args, **kwargs):
-            try:
-                return function(*args, **kwargs)
-            except exception_classes as e:
-                if tries_counter.get("count") + 1 > tries:
-                    raise e
+        is_async = inspect.iscoroutinefunction(function)
 
-                delay_now = (
-                    delay
-                    if tries_counter.get("count") == 1
-                    else tries_counter.get("last_delay") * rate
-                )
-                tries_counter.update(
-                    {"count": tries_counter.get("count") + 1, "last_delay": delay_now}
-                )
-                time.sleep(delay_now)
-                return wrapper(*args, **kwargs)
-            finally:
-                tries_counter.update({"count": 1, "last_delay": delay})
+        if is_async:
+            async def async_wrapper(*args, **kwargs):
+                try:
+                    return await function(*args, **kwargs)
+                except exception_classes as e:
+                    if tries_counter.get("count") + 1 > tries:
+                        raise e
 
-        wrapper.__doc__ = function.__doc__
-        return wrapper
+                    delay_now = (
+                        delay
+                        if tries_counter.get("count") == 1
+                        else tries_counter.get("last_delay") * rate
+                    )
+                    tries_counter.update(
+                        {"count": tries_counter.get("count") + 1, "last_delay": delay_now}
+                    )
+                    await asyncio.sleep(delay_now)
+                    return await async_wrapper(*args, **kwargs)
+                finally:
+                    tries_counter.update({"count": 1, "last_delay": delay})
+
+            async_wrapper.__doc__ = function.__doc__
+            return async_wrapper
+        else:
+            def sync_wrapper(*args, **kwargs):
+                try:
+                    return function(*args, **kwargs)
+                except exception_classes as e:
+                    if tries_counter.get("count") + 1 > tries:
+                        raise e
+
+                    delay_now = (
+                        delay
+                        if tries_counter.get("count") == 1
+                        else tries_counter.get("last_delay") * rate
+                    )
+                    tries_counter.update(
+                        {"count": tries_counter.get("count") + 1, "last_delay": delay_now}
+                    )
+                    import time
+                    time.sleep(delay_now)
+                    return sync_wrapper(*args, **kwargs)
+                finally:
+                    tries_counter.update({"count": 1, "last_delay": delay})
+
+            sync_wrapper.__doc__ = function.__doc__
+            return sync_wrapper
 
     return decorator
 

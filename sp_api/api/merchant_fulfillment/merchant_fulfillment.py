@@ -8,7 +8,7 @@ class MerchantFulfillment(Client):
     """
 
     @sp_endpoint("/mfn/v0/eligibleServices", method="POST")
-    def get_eligible_shipment_services_old(
+    async def get_eligible_shipment_services_old(
         self, shipment_request_details: dict, **kwargs
     ) -> ApiResponse:
         """
@@ -72,10 +72,10 @@ class MerchantFulfillment(Client):
         # GetEligibleShipmentServicesRequest
         data = {"ShipmentRequestDetails": shipment_request_details, **kwargs}
 
-        return self._request(kwargs.pop("path"), data=data)
+        return await self._request(kwargs.pop("path"), data=data)
 
     @sp_endpoint("/mfn/v0/eligibleShippingServices", method="POST")
-    def get_eligible_shipment_services(
+    async def get_eligible_shipment_services(
         self, shipment_request_details: dict, **kwargs
     ) -> ApiResponse:
         """
@@ -140,10 +140,10 @@ class MerchantFulfillment(Client):
         # GetEligibleShipmentServicesRequest
         data = {"ShipmentRequestDetails": shipment_request_details, **kwargs}
 
-        return self._request(kwargs.pop("path"), data=data)
+        return await self._request(kwargs.pop("path"), data=data)
 
     @sp_endpoint("/mfn/v0/shipments/{}")
-    def get_shipment(self, shipment_id: str, **kwargs) -> ApiResponse:
+    async def get_shipment(self, shipment_id: str, **kwargs) -> ApiResponse:
         """
         get_shipment(self, shipmentId:str) -> ApiResponse
         Returns a specified item and its attributes.
@@ -169,14 +169,14 @@ class MerchantFulfillment(Client):
         Returns:
             GetShipmentResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/mfn/v0/shipments/{}", method="DELETE")
-    def cancel_shipment(self, shipment_id: str, **kwargs) -> ApiResponse:
+    async def cancel_shipment(self, shipment_id: str, **kwargs) -> ApiResponse:
         """
         cancel_shipment(self, shipment_id: str, **kwargs) -> ApiResponse
         Cancel the shipment indicated by the specified shipment identifier.
@@ -197,14 +197,14 @@ class MerchantFulfillment(Client):
         Returns:
             CancelShipmentResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/mfn/v0/shipments/{}/cancel", method="PUT")
-    def cancel_shipment_old(self, shipment_id: str, **kwargs) -> ApiResponse:
+    async def cancel_shipment_old(self, shipment_id: str, **kwargs) -> ApiResponse:
         """
         cancel_shipment_old(self, shipment_id: str, **kwargs) -> ApiResponse
         Cancel the shipment indicated by the specified shipment identifer.
@@ -225,14 +225,14 @@ class MerchantFulfillment(Client):
         Returns:
             CancelShipmentResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/mfn/v0/shipments", method="POST")
-    def create_shipment(
+    async def create_shipment(
         self, shipment_request_details: dict, shipping_service_id: str, **kwargs
     ) -> ApiResponse:
         """
@@ -308,10 +308,10 @@ class MerchantFulfillment(Client):
             "ShippingServiceId": shipping_service_id,
             **kwargs,
         }
-        return self._request(kwargs.pop("path"), data=data, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=data, add_marketplace=False)
 
     @sp_endpoint("/mfn/v0/sellerInputs", method="POST")
-    def get_additional_seller_inputs_old(
+    async def get_additional_seller_inputs_old(
         self, shipping_service_id: str, ship_from_address: dict, order_id: str, **kwargs
     ) -> ApiResponse:
         """
@@ -344,10 +344,10 @@ class MerchantFulfillment(Client):
             "ShipFromAddress": ship_from_address,
             "OrderId": order_id,
         }
-        return self._request(kwargs.pop("path"), data=data, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=data, add_marketplace=False)
 
     @sp_endpoint("/mfn/v0/additionalSellerInputs", method="POST")
-    def get_additional_seller_inputs(
+    async def get_additional_seller_inputs(
         self, shipping_service_id: str, ship_from_address: dict, order_id: str, **kwargs
     ) -> ApiResponse:
         """
@@ -380,4 +380,4 @@ class MerchantFulfillment(Client):
             "ShipFromAddress": ship_from_address,
             "OrderId": order_id,
         }
-        return self._request(kwargs.pop("path"), data=data, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=data, add_marketplace=False)

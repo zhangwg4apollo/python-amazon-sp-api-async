@@ -21,7 +21,8 @@ LWA_CLIENT_SECRET        Your login with amazon client secret
 
     .. code-block:: python
 
-        Orders(refresh_token='...')
+        async with Orders(refresh_token='...') as client:
+            ...
 
 To set environment variables under linux/mac, use
 
@@ -43,7 +44,10 @@ Usage with default account
 
 ..  code-block:: python
 
-    Orders().get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+    from datetime import datetime, timedelta
+
+    async with Orders() as client:
+        await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 
 
 **************************
@@ -54,7 +58,10 @@ You can use every account's name
 
 ..  code-block:: python
 
-    Orders(account='ANOTHER_ACCOUNT').get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+    from datetime import datetime, timedelta
+
+    async with Orders(account='ANOTHER_ACCOUNT') as client:
+        await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 
 .. note::
 
@@ -62,5 +69,8 @@ You can use every account's name
 
     ..  code-block:: python
 
-        Orders(account='ANOTHER_ACCOUNT', refresh_token='<refresh_token_for_this_request>').get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+        from datetime import datetime, timedelta
+
+        async with Orders(account='ANOTHER_ACCOUNT', refresh_token='<refresh_token_for_this_request>') as client:
+            await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 

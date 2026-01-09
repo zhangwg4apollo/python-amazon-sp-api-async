@@ -1,4 +1,3 @@
-import urllib.parse
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
 
@@ -11,7 +10,7 @@ class AplusContent(Client):
     """
 
     @sp_endpoint("/aplus/2020-11-01/contentDocuments", method="GET")
-    def search_content_documents(self, **kwargs) -> ApiResponse:
+    async def search_content_documents(self, **kwargs) -> ApiResponse:
         """
         search_content_documents(self, **kwargs) -> ApiResponse
 
@@ -36,10 +35,10 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/aplus/2020-11-01/contentDocuments", method="POST")
-    def create_content_document(self, **kwargs) -> ApiResponse:
+    async def create_content_document(self, **kwargs) -> ApiResponse:
         """
         create_content_document(self, **kwargs) -> ApiResponse
 
@@ -65,7 +64,7 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"),
             data=kwargs.pop("body"),
             params=kwargs,
@@ -73,7 +72,7 @@ class AplusContent(Client):
         )
 
     @sp_endpoint("/aplus/2020-11-01/contentDocuments/{}", method="GET")
-    def get_content_document(self, contentReferenceKey, **kwargs) -> ApiResponse:
+    async def get_content_document(self, contentReferenceKey, **kwargs) -> ApiResponse:
         """
         get_content_document(self, contentReferenceKey, **kwargs) -> ApiResponse
 
@@ -100,12 +99,12 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), contentReferenceKey), params=kwargs
         )
 
     @sp_endpoint("/aplus/2020-11-01/contentDocuments/{}", method="POST")
-    def update_content_document(self, contentReferenceKey, **kwargs) -> ApiResponse:
+    async def update_content_document(self, contentReferenceKey, **kwargs) -> ApiResponse:
         """
         update_content_document(self, contentReferenceKey, **kwargs) -> ApiResponse
 
@@ -129,7 +128,7 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), contentReferenceKey),
             data=kwargs.pop("body"),
             params=kwargs,
@@ -137,7 +136,7 @@ class AplusContent(Client):
         )
 
     @sp_endpoint("/aplus/2020-11-01/contentDocuments/{}/asins", method="GET")
-    def list_content_document_asin_relations(
+    async def list_content_document_asin_relations(
         self, contentReferenceKey, **kwargs
     ) -> ApiResponse:
         """
@@ -165,12 +164,12 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), contentReferenceKey), params=kwargs
         )
 
     @sp_endpoint("/aplus/2020-11-01/contentDocuments/{}/asins", method="POST")
-    def post_content_document_asin_relations(
+    async def post_content_document_asin_relations(
         self, contentReferenceKey, **kwargs
     ) -> ApiResponse:
         """
@@ -196,7 +195,7 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), contentReferenceKey),
             data=kwargs.pop("body"),
             params=kwargs,
@@ -204,7 +203,7 @@ class AplusContent(Client):
         )
 
     @sp_endpoint("/aplus/2020-11-01/contentAsinValidations", method="POST")
-    def validate_content_document_asin_relations(self, **kwargs) -> ApiResponse:
+    async def validate_content_document_asin_relations(self, **kwargs) -> ApiResponse:
         """
         validate_content_document_asin_relations(self, **kwargs) -> ApiResponse
 
@@ -229,7 +228,7 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"),
             data=kwargs.pop("body"),
             params=kwargs,
@@ -237,7 +236,7 @@ class AplusContent(Client):
         )
 
     @sp_endpoint("/aplus/2020-11-01/contentPublishRecords", method="GET")
-    def search_content_publish_records(self, **kwargs) -> ApiResponse:
+    async def search_content_publish_records(self, **kwargs) -> ApiResponse:
         """
         search_content_publish_records(self, **kwargs) -> ApiResponse
 
@@ -261,12 +260,12 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint(
         "/aplus/2020-11-01/contentDocuments/{}/approvalSubmissions", method="POST"
     )
-    def post_content_document_approval_submission(
+    async def post_content_document_approval_submission(
         self, contentReferenceKey, **kwargs
     ) -> ApiResponse:
         """
@@ -291,14 +290,14 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), contentReferenceKey), params=kwargs
         )
 
     @sp_endpoint(
         "/aplus/2020-11-01/contentDocuments/{}/suspendSubmissions", method="POST"
     )
-    def post_content_document_suspend_submission(
+    async def post_content_document_suspend_submission(
         self, contentReferenceKey, **kwargs
     ) -> ApiResponse:
         """
@@ -323,6 +322,6 @@ class AplusContent(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), contentReferenceKey), data=kwargs
         )

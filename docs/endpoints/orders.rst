@@ -14,7 +14,8 @@ To use a restricted data token to access PII data, you can pass the token obtain
 
 ..  code-block:: python
 
-    Orders(restricted_data_token='......').get_orders(...)
+    async with Orders(restricted_data_token='......') as client:
+        await client.get_orders(...)
 
 
 

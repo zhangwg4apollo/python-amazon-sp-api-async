@@ -7,33 +7,41 @@ If your application has access to PII-Data, you can request a token with the `To
 
 .. code-block:: python
 
-    token_res = Tokens().create_restricted_data_token(restrictedResources=[{
-         "method": "GET",
-         "path": "/orders/v0/orders",
-         "dataElements": ["buyerInfo", "shippingAddress"]
-        }
-    ])
-    orders = Orders(restricted_data_token=token_res.payload['restrictedDataToken']).get_orders(LastUpdatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+    from sp_api.api import Tokens, Orders
+    from datetime import datetime, timedelta
 
-    # orders have buyerInfo and shippingAddress
-    print(orders)
+    async with Tokens() as tokens_client:
+        token_res = await tokens_client.create_restricted_data_token(restrictedResources=[{
+             "method": "GET",
+             "path": "/orders/v0/orders",
+             "dataElements": ["buyerInfo", "shippingAddress"]
+            }
+        ])
+        async with Orders(restricted_data_token=token_res.payload['restrictedDataToken']) as orders_client:
+            orders = await orders_client.get_orders(LastUpdatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+
+            # orders have buyerInfo and shippingAddress
+            print(orders)
 
 Starting with v0.9.0, you can also pass the `RestrictedResources` to the `Orders` calls:
 
 .. code-block:: python
 
-        orders = Orders().get_orders(
-            RestrictedResources=['buyerInfo', 'shippingAddress'],
-            LastUpdatedAfter=(datetime.utcnow() - timedelta(days=1)).isoformat()
-        )
+        from datetime import datetime, timedelta
 
-        order = Orders().get_order(
-            'order-id',
-            RestrictedResources=['buyerInfo', 'shippingAddress']
-        )
+        async with Orders() as orders_client:
+            orders = await orders_client.get_orders(
+                RestrictedResources=['buyerInfo', 'shippingAddress'],
+                LastUpdatedAfter=(datetime.utcnow() - timedelta(days=1)).isoformat()
+            )
 
-        order_items = Orders().get_order_items(
-            'order-id',
-            RestrictedResources=['buyerInfo']
-        )
+            order = await orders_client.get_order(
+                'order-id',
+                RestrictedResources=['buyerInfo', 'shippingAddress']
+            )
+
+            order_items = await orders_client.get_order_items(
+                'order-id',
+                RestrictedResources=['buyerInfo']
+            )
 

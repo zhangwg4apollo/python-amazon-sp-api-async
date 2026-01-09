@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -13,7 +12,7 @@ class ApplicationIntegrations(Client):
 
 
     @sp_endpoint('/appIntegrations/2024-04-01/notifications', method='POST')
-    def create_notification(self, **kwargs) -> ApiResponse:
+    async def create_notification(self, **kwargs) -> ApiResponse:
         """
         create_notification(self, **kwargs) -> ApiResponse
 
@@ -42,11 +41,11 @@ class ApplicationIntegrations(Client):
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), data=kwargs)
+        return await self._request(kwargs.pop('path'), data=kwargs)
     
 
     @sp_endpoint('/appIntegrations/2024-04-01/notifications/deletion', method='POST')
-    def delete_notifications(self, **kwargs) -> ApiResponse:
+    async def delete_notifications(self, **kwargs) -> ApiResponse:
         """
         delete_notifications(self, **kwargs) -> ApiResponse
 
@@ -78,11 +77,11 @@ class ApplicationIntegrations(Client):
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), data=kwargs)
+        return await self._request(kwargs.pop('path'), data=kwargs)
     
 
     @sp_endpoint('/appIntegrations/2024-04-01/notifications/{}/feedback', method='POST')
-    def record_action_feedback(self, notificationId, **kwargs) -> ApiResponse:
+    async def record_action_feedback(self, notificationId, **kwargs) -> ApiResponse:
         """
         record_action_feedback(self, notificationId, **kwargs) -> ApiResponse
 
@@ -114,5 +113,5 @@ class ApplicationIntegrations(Client):
             ApiResponse:
         """
     
-        return self._request(fill_query_params(kwargs.pop('path'), notificationId), data=kwargs)
+        return await self._request(fill_query_params(kwargs.pop('path'), notificationId), data=kwargs)
     

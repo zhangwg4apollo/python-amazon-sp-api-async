@@ -1,5 +1,5 @@
-from sp_api.base import sp_endpoint, fill_query_params, ApiResponse, deprecated
-from sp_api.base import Client, Marketplaces
+from sp_api.base import sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client
 
 
 class Orders(Client):
@@ -8,7 +8,7 @@ class Orders(Client):
     """
 
     @sp_endpoint("/orders/v0/orders")
-    def get_orders(self, **kwargs) -> ApiResponse:
+    async def get_orders(self, **kwargs) -> ApiResponse:
         """
         get_orders(self, **kwargs) -> ApiResponse
         Returns orders created or updated during the time frame indicated by the specified parameters.
@@ -29,7 +29,7 @@ class Orders(Client):
         Examples:
             literal blocks::
 
-                Orders().get_orders(CreatedAfter='TEST_CASE_200', MarketplaceIds=["ATVPDKIKX0DER"])
+                await Orders().get_orders(CreatedAfter='TEST_CASE_200', MarketplaceIds=["ATVPDKIKX0DER"])
 
         Args:
             key CreatedAfter: date
@@ -54,11 +54,11 @@ class Orders(Client):
 
         """
         if "RestrictedResources" in kwargs:
-            return self._access_restricted(kwargs)
-        return self._request(kwargs.pop("path"), params={**kwargs})
+            return await self._access_restricted(kwargs)
+        return await self._request(kwargs.pop("path"), params={**kwargs})
 
     @sp_endpoint("/orders/v0/orders/{}")
-    def get_order(self, order_id: str, **kwargs) -> ApiResponse:
+    async def get_order(self, order_id: str, **kwargs) -> ApiResponse:
         """
         get_order(self, order_id: str, **kwargs) -> ApiResponse
         Returns the order indicated by the specified order ID.
@@ -77,7 +77,7 @@ class Orders(Client):
         Examples:
             literal blocks::
 
-                Orders().get_order('TEST_CASE_200')
+                await Orders().get_order('TEST_CASE_200')
 
         Args:
             order_id: str
@@ -93,15 +93,15 @@ class Orders(Client):
             kwargs.update(
                 {"original_path": fill_query_params(kwargs.get("path"), order_id)}
             )
-            return self._access_restricted(kwargs)
-        return self._request(
+            return await self._access_restricted(kwargs)
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             params={**kwargs},
             add_marketplace=False,
         )
 
     @sp_endpoint("/orders/v0/orders/{}/orderItems")
-    def get_order_items(self, order_id: str, **kwargs) -> ApiResponse:
+    async def get_order_items(self, order_id: str, **kwargs) -> ApiResponse:
         """
         get_order_items(self, order_id: str, **kwargs) -> ApiResponse
 
@@ -131,7 +131,7 @@ class Orders(Client):
         Examples:
             literal blocks::
 
-                Orders().get_order_items('TEST_CASE_200')
+                await Orders().get_order_items('TEST_CASE_200')
 
         Args:
             order_id: str
@@ -146,13 +146,13 @@ class Orders(Client):
             kwargs.update(
                 {"original_path": fill_query_params(kwargs.get("path"), order_id)}
             )
-            return self._access_restricted(kwargs)
-        return self._request(
+            return await self._access_restricted(kwargs)
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id), params={**kwargs}
         )
 
     @sp_endpoint("/orders/v0/orders/{}/address")
-    def get_order_address(self, order_id, **kwargs) -> ApiResponse:
+    async def get_order_address(self, order_id, **kwargs) -> ApiResponse:
         """
         get_order_address(self, order_id, **kwargs) -> ApiResponse
 
@@ -169,7 +169,7 @@ class Orders(Client):
         ======================================  ==============
 
         Examples:
-            Orders().get_order_address('TEST_CASE_200')
+            await Orders().get_order_address('TEST_CASE_200')
 
         Args:
             order_id: str
@@ -178,12 +178,12 @@ class Orders(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id), params={**kwargs}
         )
 
     @sp_endpoint("/orders/v0/orders/{}/buyerInfo")
-    def get_order_buyer_info(self, order_id: str, **kwargs) -> ApiResponse:
+    async def get_order_buyer_info(self, order_id: str, **kwargs) -> ApiResponse:
         """
         get_order_buyer_info(self, order_id: str, **kwargs) -> ApiResponse
         Returns buyer information for the order indicated by the specified order ID.
@@ -203,7 +203,7 @@ class Orders(Client):
         For more information, see "Usage Plans and Rate Limits" in the Selling Partner API documentation.
 
         Examples:
-            Orders().get_order_buyer_info('TEST_CASE_200')
+            await Orders().get_order_buyer_info('TEST_CASE_200')
 
         Args:
             order_id: str
@@ -213,12 +213,12 @@ class Orders(Client):
             GetOrderBuyerInfoResponse:
 
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id), params={**kwargs}
         )
 
     @sp_endpoint("/orders/v0/orders/{}/orderItems/buyerInfo")
-    def get_order_items_buyer_info(self, order_id: str, **kwargs) -> ApiResponse:
+    async def get_order_items_buyer_info(self, order_id: str, **kwargs) -> ApiResponse:
         """
         get_order_items_buyer_info(self, order_id: str, **kwargs) -> ApiResponse
 
@@ -237,7 +237,7 @@ class Orders(Client):
         Examples:
             literal blocks::
 
-                Orders().get_order_items_buyer_info('TEST_CASE_200')
+                await Orders().get_order_items_buyer_info('TEST_CASE_200')
 
         Args:
             order_id: str
@@ -246,12 +246,12 @@ class Orders(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id), params=kwargs
         )
 
     @sp_endpoint("/orders/v0/orders/{}/shipment", method="POST")
-    def update_shipment_status(self, order_id: str, **kwargs) -> ApiResponse:
+    async def update_shipment_status(self, order_id: str, **kwargs) -> ApiResponse:
         """
         update_shipment_status(self, order_id: str, **kwargs) -> ApiResponse
         Update the shipment status.
@@ -264,7 +264,7 @@ class Orders(Client):
         For more information, see "Usage Plans and Rate Limits" in the Selling Partner API documentation.
         Examples:
             literal blocks::
-                Orders().update_shipment_status(
+                await Orders().update_shipment_status(
                     order_id='123-1234567-1234567',
                     marketplaceId='ATVPDKIKX0DER',
                     shipmentStatus='ReadyForPickup'
@@ -274,14 +274,14 @@ class Orders(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             res_no_data=True,
             data=kwargs,
         )
 
     @sp_endpoint("/orders/v0/orders/{}/shipmentConfirmation", method="POST")
-    def confirm_shipment(self, order_id: str, **kwargs) -> ApiResponse:
+    async def confirm_shipment(self, order_id: str, **kwargs) -> ApiResponse:
         """
         confirm_shipment(self, order_id: str, **kwargs) -> ApiResponse
         Updates the shipment confirmation status for a specified order.
@@ -294,7 +294,7 @@ class Orders(Client):
         For more information, see "Usage Plans and Rate Limits" in the Selling Partner API documentation.
         Examples:
             literal blocks::
-                Orders().confirm_shipment(
+                await Orders().confirm_shipment(
                     order_id='123-1234567-1234567',
                     marketplaceId='ATVPDKIKX0DER',
                     packageDetail={
@@ -320,7 +320,7 @@ class Orders(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             add_marketplace=False,
             res_no_data=True,
@@ -328,7 +328,7 @@ class Orders(Client):
         )
 
     @sp_endpoint("/tokens/2021-03-01/restrictedDataToken", method="POST")
-    def _get_token(self, **kwargs):
+    async def _get_token(self, **kwargs):
         data_elements = kwargs.pop("RestrictedResources")
 
         restricted_resources = [
@@ -339,17 +339,18 @@ class Orders(Client):
             }
         ]
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"),
             data={"restrictedResources": restricted_resources, **kwargs},
         )
 
-    def _access_restricted(self, kwargs):
+    async def _access_restricted(self, kwargs):
         if "original_path" not in kwargs:
             kwargs.update({"original_path": kwargs["path"]})
-        token = self._get_token(**kwargs).payload
+        token_response = await self._get_token(**kwargs)
+        token = token_response.payload
         self.restricted_data_token = token["restrictedDataToken"]
-        r = self._request(kwargs.pop("original_path"), params={**kwargs})
+        r = await self._request(kwargs.pop("original_path"), params={**kwargs})
         if not self.keep_restricted_data_token:
             self.restricted_data_token = None
         return r

@@ -1,6 +1,6 @@
 import os
 
-import requests
+import httpx
 import hashlib
 import logging
 from cachetools import TTLCache
@@ -25,9 +25,10 @@ class AccessTokenClient(BaseClient):
         self.cred = Credentials(refresh_token, credentials)
         self.proxies = proxies
         self.verify = verify
+        self._client = httpx.AsyncClient(proxy=proxies, verify=verify)
 
-    def _request(self, url, data, headers):
-        response = requests.post(url, data=data, headers=headers, proxies=self.proxies, verify=self.verify)
+    async def _request(self, url, data, headers):
+        response = await self._client.post(url, data=data, headers=headers)
         response_data = response.json()
         if response.status_code != 200:
             error_message = response_data.get('error_description')
@@ -35,7 +36,16 @@ class AccessTokenClient(BaseClient):
             raise AuthorizationError(error_code, error_message, response.status_code)
         return response_data
 
-    def get_auth(self) -> AccessTokenResponse:
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.aclose()
+
+    async def aclose(self):
+        await self._client.aclose()
+
+    async def get_auth(self) -> AccessTokenResponse:
         """
         Get's the access token
         :return:AccessTokenResponse
@@ -46,11 +56,11 @@ class AccessTokenClient(BaseClient):
             access_token = cache[cache_key]
         except KeyError:
             request_url = self.scheme + self.host + self.path
-            access_token = self._request(request_url, self.data, self.headers)
+            access_token = await self._request(request_url, self.data, self.headers)
             cache[cache_key] = access_token
         return AccessTokenResponse(**access_token)
 
-    def get_grantless_auth(self, scope='sellingpartnerapi::notifications'):
+    async def get_grantless_auth(self, scope='sellingpartnerapi::notifications'):
         """
         :param scope: One of allowed scope for grantless operations:
             sellingpartnerapi::notifications or sellingpartnerapi::migration
@@ -72,7 +82,7 @@ class AccessTokenClient(BaseClient):
             logger.debug('from_cache. scope: %s', scope)
         except KeyError:
             request_url = self.scheme + self.host + self.path
-            access_token = self._request(
+            access_token = await self._request(
                 request_url,
                 data=self.grantless_data(scope),
                 headers=self.headers
@@ -83,9 +93,9 @@ class AccessTokenClient(BaseClient):
 
         return AccessTokenResponse(**access_token)
 
-    def authorize_auth_code(self, auth_code):
+    async def authorize_auth_code(self, auth_code):
         request_url = self.scheme + self.host + self.path
-        res = self._request(
+        res = await self._request(
             request_url,
             data=self._auth_code_request_body(auth_code),
             headers=self.headers

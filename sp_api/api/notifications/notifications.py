@@ -1,5 +1,5 @@
 from sp_api.base.helpers import sp_endpoint, fill_query_params
-from sp_api.base import Client, Marketplaces, deprecated, NotificationType, ApiResponse
+from sp_api.base import Client, deprecated, NotificationType, ApiResponse
 
 
 class Notifications(Client):
@@ -15,7 +15,7 @@ class Notifications(Client):
         return self.create_subscription(notification_type, **kwargs)
 
     @sp_endpoint("/notifications/v1/subscriptions/{}", method="POST")
-    def create_subscription(
+    async def create_subscription(
         self,
         notification_type: NotificationType or str,
         destination_id: str = None,
@@ -55,7 +55,7 @@ class Notifications(Client):
             "destinationId": kwargs.pop("destinationId", destination_id),
             "payloadVersion": kwargs.pop("payload_version", "1.0"),
         }
-        return self._request(
+        return await self._request(
             fill_query_params(
                 kwargs.pop("path"),
                 (
@@ -68,7 +68,7 @@ class Notifications(Client):
         )
 
     @sp_endpoint("/notifications/v1/subscriptions/{}")
-    def get_subscription(
+    async def get_subscription(
         self, notification_type: NotificationType or str, **kwargs
     ) -> ApiResponse:
         """
@@ -98,7 +98,7 @@ class Notifications(Client):
             ApiResponse:
 
         """
-        return self._request(
+        return await self._request(
             fill_query_params(
                 kwargs.pop("path"),
                 (
@@ -111,7 +111,7 @@ class Notifications(Client):
         )
 
     @sp_endpoint("/notifications/v1/subscriptions/{}/{}", method="DELETE")
-    def delete_notification_subscription(
+    async def delete_notification_subscription(
         self, notification_type: NotificationType or str, subscription_id: str, **kwargs
     ) -> ApiResponse:
         """
@@ -141,7 +141,7 @@ class Notifications(Client):
             ApiResponse:
 
         """
-        return self._request(
+        return await self._request(
             fill_query_params(
                 kwargs.pop("path"),
                 (
@@ -155,7 +155,7 @@ class Notifications(Client):
         )
 
     @sp_endpoint(path="/notifications/v1/destinations", method="POST")
-    def create_destination(
+    async def create_destination(
         self,
         name: str,
         arn: str = None,
@@ -205,12 +205,12 @@ class Notifications(Client):
             "name": name,
         }
 
-        return self._request_grantless_operation(
+        return await self._request_grantless_operation(
             kwargs.pop("path"), data={**kwargs, **data}
         )
 
     @sp_endpoint("/notifications/v1/destinations", method="GET")
-    def get_destinations(self, **kwargs) -> ApiResponse:
+    async def get_destinations(self, **kwargs) -> ApiResponse:
         """
         get_destinations(self, **kwargs) -> ApiResponse
         Returns information about all destinations. The getDestinations API is grantless. For more information, see "Grantless operations" in the Selling Partner API Developer Guide.
@@ -233,10 +233,10 @@ class Notifications(Client):
             ApiResponse:
 
         """
-        return self._request_grantless_operation(kwargs.pop("path"), params={**kwargs})
+        return await self._request_grantless_operation(kwargs.pop("path"), params={**kwargs})
 
     @sp_endpoint("/notifications/v1/destinations/{}", method="GET")
-    def get_destination(self, destination_id: str, **kwargs) -> ApiResponse:
+    async def get_destination(self, destination_id: str, **kwargs) -> ApiResponse:
         """
         get_destination(self, destination_id: str, **kwargs) -> ApiResponse
         Returns information about all destinations. The getDestinations API is grantless. For more information, see "Grantless operations" in the Selling Partner API Developer Guide.
@@ -261,12 +261,12 @@ class Notifications(Client):
 
 
         """
-        return self._request_grantless_operation(
+        return await self._request_grantless_operation(
             fill_query_params(kwargs.pop("path"), destination_id), params={**kwargs}
         )
 
     @sp_endpoint("/notifications/v1/destinations/{}", method="DELETE")
-    def delete_destination(self, destination_id: str, **kwargs) -> ApiResponse:
+    async def delete_destination(self, destination_id: str, **kwargs) -> ApiResponse:
         """
         delete_destination(self, destination_id: str, **kwargs) -> ApiResponse
         Deletes the destination that you specify. The deleteDestination API is grantless. For more information, see "Grantless operations" in the Selling Partner API Developer Guide.
@@ -289,6 +289,6 @@ class Notifications(Client):
             ApiResponse:
 
         """
-        return self._request_grantless_operation(
+        return await self._request_grantless_operation(
             fill_query_params(kwargs.pop("path"), destination_id), params={**kwargs}
         )

@@ -5,7 +5,7 @@ import urllib.parse
 
 class Upload(Client):
     @sp_endpoint("/uploads/2020-11-01/uploadDestinations/{}", method="POST")
-    def upload_document(self, resource, file, content_type="application/pdf", **kwargs):
+    async def upload_document(self, resource, file, content_type="application/pdf", **kwargs):
         md5 = urllib.parse.quote(create_md5(file))
         kwargs.update(
             {
@@ -14,4 +14,4 @@ class Upload(Client):
                 "marketplaceIds": self.marketplace_id,
             }
         )
-        return self._request(kwargs.pop("path").format(resource), params=kwargs)
+        return await self._request(kwargs.pop("path").format(resource), params=kwargs)

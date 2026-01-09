@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -12,7 +11,7 @@ class FulfillmentOutbound(Client):
     """
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders/preview", method="POST")
-    def get_fulfillment_preview(self, **kwargs) -> ApiResponse:
+    async def get_fulfillment_preview(self, **kwargs) -> ApiResponse:
         """
         get_fulfillment_preview(self, **kwargs) -> ApiResponse
 
@@ -113,10 +112,10 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders", method="GET")
-    def list_all_fulfillment_orders(self, **kwargs) -> ApiResponse:
+    async def list_all_fulfillment_orders(self, **kwargs) -> ApiResponse:
         """
         list_all_fulfillment_orders(self, **kwargs) -> ApiResponse
 
@@ -140,10 +139,10 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders", method="POST")
-    def create_fulfillment_order(self, **kwargs) -> ApiResponse:
+    async def create_fulfillment_order(self, **kwargs) -> ApiResponse:
         """
         create_fulfillment_order(self, **kwargs) -> ApiResponse
 
@@ -325,10 +324,10 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/fba/outbound/2020-07-01/tracking", method="GET")
-    def get_package_tracking_details(self, **kwargs) -> ApiResponse:
+    async def get_package_tracking_details(self, **kwargs) -> ApiResponse:
         """
         get_package_tracking_details(self, **kwargs) -> ApiResponse
 
@@ -351,10 +350,10 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/outbound/2020-07-01/returnReasonCodes", method="GET")
-    def list_return_reason_codes(self, **kwargs) -> ApiResponse:
+    async def list_return_reason_codes(self, **kwargs) -> ApiResponse:
         """
         list_return_reason_codes(self, **kwargs) -> ApiResponse
 
@@ -381,10 +380,10 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders/{}/return", method="PUT")
-    def create_fulfillment_return(
+    async def create_fulfillment_return(
         self, sellerFulfillmentOrderId, **kwargs
     ) -> ApiResponse:
         """
@@ -437,12 +436,12 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerFulfillmentOrderId), data=kwargs
         )
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders/{}", method="GET")
-    def get_fulfillment_order(self, sellerFulfillmentOrderId, **kwargs) -> ApiResponse:
+    async def get_fulfillment_order(self, sellerFulfillmentOrderId, **kwargs) -> ApiResponse:
         """
         get_fulfillment_order(self, sellerFulfillmentOrderId, **kwargs) -> ApiResponse
 
@@ -465,13 +464,13 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerFulfillmentOrderId),
             params=kwargs,
         )
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders/{}", method="PUT")
-    def update_fulfillment_order(
+    async def update_fulfillment_order(
         self, sellerFulfillmentOrderId, **kwargs
     ) -> ApiResponse:
         """
@@ -611,12 +610,12 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerFulfillmentOrderId), data=kwargs
         )
 
     @sp_endpoint("/fba/outbound/2020-07-01/fulfillmentOrders/{}/cancel", method="PUT")
-    def cancel_fulfillment_order(
+    async def cancel_fulfillment_order(
         self, sellerFulfillmentOrderId, **kwargs
     ) -> ApiResponse:
         """
@@ -642,12 +641,12 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerFulfillmentOrderId), data=kwargs
         )
 
     @sp_endpoint("/fba/outbound/2020-07-01/features", method="GET")
-    def get_features(self, **kwargs) -> ApiResponse:
+    async def get_features(self, **kwargs) -> ApiResponse:
         """
         get_features(self, **kwargs) -> ApiResponse
 
@@ -671,10 +670,10 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/outbound/2020-07-01/features/inventory/{}", method="GET")
-    def get_feature_inventory(self, featureName, **kwargs) -> ApiResponse:
+    async def get_feature_inventory(self, featureName, **kwargs) -> ApiResponse:
         """
         get_feature_inventory(self, featureName, **kwargs) -> ApiResponse
 
@@ -699,12 +698,12 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), featureName), params=kwargs
         )
 
     @sp_endpoint("/fba/outbound/2020-07-01/features/inventory/{}", method="GET")
-    def get_feature_s_k_u(self, featureName, **kwargs) -> ApiResponse:
+    async def get_feature_s_k_u(self, featureName, **kwargs) -> ApiResponse:
         """
         get_feature_s_k_u(self, featureName, **kwargs) -> ApiResponse
 
@@ -730,6 +729,6 @@ class FulfillmentOutbound(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), featureName), params=kwargs
         )

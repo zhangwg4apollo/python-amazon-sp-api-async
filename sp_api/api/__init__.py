@@ -30,7 +30,6 @@ from .customer_feedback.customer_feedback import CustomerFeedback
 
 from .listings_restrictions.listings_restrictions import ListingsRestrictions
 
-from .messaging.messaging import Messaging
 
 from .catalog_items.catalog_items import CatalogItems, CatalogItemsVersion
 

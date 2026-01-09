@@ -16,7 +16,8 @@ If you pass a value in credentials, other credentials from env variables or from
 
     .. code-block:: python
 
-        Orders(refresh_token='...')
+        async with Orders(refresh_token='...') as client:
+            ...
 
 
 ..  code-block:: python
@@ -35,5 +36,8 @@ Usage
 
 ..  code-block:: python
 
-    Orders(credentials=credentials).get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+    from datetime import datetime, timedelta
+
+    async with Orders(credentials=credentials) as client:
+        await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 

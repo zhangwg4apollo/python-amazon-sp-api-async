@@ -10,7 +10,7 @@ class SupplySources(Client):
     """
 
     @sp_endpoint("/supplySources/2020-07-01/supplySources", method="GET")
-    def get_supply_sources(self, **kwargs) -> ApiResponse:
+    async def get_supply_sources(self, **kwargs) -> ApiResponse:
         """
         get_supply_sources(self, **kwargs) -> ApiResponse
 
@@ -27,10 +27,10 @@ class SupplySources(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/supplySources/2020-07-01/supplySources", method="POST")
-    def create_supply_source(self, **kwargs) -> ApiResponse:
+    async def create_supply_source(self, **kwargs) -> ApiResponse:
         """
                create_supply_source(self, **kwargs) -> ApiResponse
 
@@ -48,10 +48,10 @@ class SupplySources(Client):
                    ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/supplySources/2020-07-01/supplySources/{}", method="GET")
-    def get_supply_source(self, supplySourceId, **kwargs) -> ApiResponse:
+    async def get_supply_source(self, supplySourceId, **kwargs) -> ApiResponse:
         """
         get_supply_source(self, supplySourceId, **kwargs) -> ApiResponse
 
@@ -66,12 +66,12 @@ class SupplySources(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), supplySourceId), params=kwargs
         )
 
     @sp_endpoint("/supplySources/2020-07-01/supplySources/{}", method="PUT")
-    def update_supply_source(self, supplySourceId, **kwargs) -> ApiResponse:
+    async def update_supply_source(self, supplySourceId, **kwargs) -> ApiResponse:
         """
         update_supply_source(self, supplySourceId, **kwargs) -> ApiResponse
 
@@ -90,12 +90,12 @@ class SupplySources(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), supplySourceId), data=kwargs
         )
 
     @sp_endpoint("/supplySources/2020-07-01/supplySources/{}", method="DELETE")
-    def archive_supply_source(self, supplySourceId, **kwargs) -> ApiResponse:
+    async def archive_supply_source(self, supplySourceId, **kwargs) -> ApiResponse:
         """
         archive_supply_source(self, supplySourceId, **kwargs) -> ApiResponse
 
@@ -110,12 +110,12 @@ class SupplySources(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), supplySourceId), data=kwargs
         )
 
     @sp_endpoint("/supplySources/2020-07-01/supplySources/{}/status", method="PUT")
-    def update_supply_source_status(self, supplySourceId, **kwargs) -> ApiResponse:
+    async def update_supply_source_status(self, supplySourceId, **kwargs) -> ApiResponse:
         """
         update_supply_source_status(self, supplySourceId, **kwargs) -> ApiResponse
 
@@ -132,6 +132,6 @@ class SupplySources(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), supplySourceId), data=kwargs
         )

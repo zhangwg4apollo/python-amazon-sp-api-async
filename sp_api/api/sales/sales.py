@@ -1,8 +1,7 @@
 import urllib
 from datetime import datetime
 
-from sp_api.base import Client, Marketplaces, sp_endpoint, Granularity, ApiResponse
-import logging
+from sp_api.base import Client, sp_endpoint, Granularity, ApiResponse
 
 
 class Sales(Client):
@@ -11,7 +10,7 @@ class Sales(Client):
     """
 
     @sp_endpoint("/sales/v1/orderMetrics")
-    def get_order_metrics(
+    async def get_order_metrics(
         self,
         interval: tuple,
         granularity: Granularity,
@@ -73,7 +72,7 @@ class Sales(Client):
             kwargs.update({"granularityTimeZone": granularityTimeZone})
         if "sku" in kwargs:
             kwargs.update({"sku": urllib.parse.quote(kwargs.pop("sku"), safe="")})
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @staticmethod
     def _create_datetime_stamp(datetime_obj: datetime or str):

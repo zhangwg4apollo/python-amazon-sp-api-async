@@ -1,9 +1,7 @@
-import urllib.parse
 
 from sp_api.base import (
     Client,
     sp_endpoint,
-    fill_query_params,
     IneligibilityReasonList,
     ApiResponse,
 )
@@ -18,7 +16,7 @@ class FbaInboundEligibility(Client):
     """
 
     @sp_endpoint("/fba/inbound/v1/eligibility/itemPreview", method="GET")
-    def get_item_eligibility_preview(self, **kwargs) -> ApiResponse:
+    async def get_item_eligibility_preview(self, **kwargs) -> ApiResponse:
         """
         get_item_eligibility_preview(self, **kwargs) -> ApiResponse
 
@@ -44,10 +42,10 @@ class FbaInboundEligibility(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/inbound/v1/eligibility/itemPreview", method="GET")
-    def get_item_eligibility_preview_extended(self, **kwargs) -> ApiResponse:
+    async def get_item_eligibility_preview_extended(self, **kwargs) -> ApiResponse:
         """
         get_item_eligibility_preview_extended(self, **kwargs) -> ApiResponse
 
@@ -74,7 +72,7 @@ class FbaInboundEligibility(Client):
             ApiResponse:
         """
 
-        api_response = self._request(kwargs.pop("path"), params=kwargs)
+        api_response = await self._request(kwargs.pop("path"), params=kwargs)
 
         if (
             api_response.payload.get("ineligibilityReasonList")

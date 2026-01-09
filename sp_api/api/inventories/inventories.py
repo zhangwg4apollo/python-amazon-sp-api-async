@@ -1,7 +1,6 @@
 from collections import abc
-import urllib
 
-from sp_api.base import Client, Marketplaces, sp_endpoint, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 from sp_api.base.InventoryEnums import InventoryGranularity
 
 
@@ -11,7 +10,7 @@ class Inventories(Client):
     """
 
     @sp_endpoint("/fba/inventory/v1/summaries")
-    def get_inventory_summary_marketplace(self, **kwargs) -> ApiResponse:
+    async def get_inventory_summary_marketplace(self, **kwargs) -> ApiResponse:
         """
         get_inventory_summary_marketplace(self, **kwargs) -> GetInventorySummariesResponse
 
@@ -41,7 +40,7 @@ class Inventories(Client):
         Examples:
             literal blocks::
 
-                Inventories().get_inventory_summary_marketplace(**{
+                await Inventories().get_inventory_summary_marketplace(**{
                         "details": True,
                         "marketplaceIds": ["ATVPDKIKX0DER"]
                     })
@@ -75,4 +74,4 @@ class Inventories(Client):
         ):
             kwargs.update({"sellerSkus": ",".join(kwargs.get("sellerSkus"))})
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)

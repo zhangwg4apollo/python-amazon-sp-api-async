@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -12,7 +11,7 @@ class Messaging(Client):
     """
 
     @sp_endpoint("/messaging/v1/orders/{}", method="GET")
-    def get_messaging_actions_for_order(self, order_id, **kwargs) -> ApiResponse:
+    async def get_messaging_actions_for_order(self, order_id, **kwargs) -> ApiResponse:
         """
         get_messaging_actions_for_order(self, order_id, **kwargs) -> ApiResponse
 
@@ -36,14 +35,14 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id), params=kwargs
         )
 
     @sp_endpoint(
         "/messaging/v1/orders/{}/messages/confirmCustomizationDetails", method="POST"
     )
-    def confirm_customization_details(self, order_id, **kwargs) -> ApiResponse:
+    async def confirm_customization_details(self, order_id, **kwargs) -> ApiResponse:
         """
         confirm_customization_details(self, order_id, **kwargs) -> ApiResponse
 
@@ -75,7 +74,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -87,7 +86,7 @@ class Messaging(Client):
     @sp_endpoint(
         "/messaging/v1/orders/{}/messages/confirmDeliveryDetails", method="POST"
     )
-    def create_confirm_delivery_details(self, order_id, **kwargs) -> ApiResponse:
+    async def create_confirm_delivery_details(self, order_id, **kwargs) -> ApiResponse:
         """
         create_confirm_delivery_details(self, order_id, **kwargs) -> ApiResponse
 
@@ -114,7 +113,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -124,7 +123,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/legalDisclosure", method="POST")
-    def create_legal_disclosure(self, order_id, **kwargs) -> ApiResponse:
+    async def create_legal_disclosure(self, order_id, **kwargs) -> ApiResponse:
         """
         create_legal_disclosure(self, order_id, **kwargs) -> ApiResponse
 
@@ -156,7 +155,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -168,7 +167,7 @@ class Messaging(Client):
     @sp_endpoint(
         "/messaging/v1/orders/{}/messages/negativeFeedbackRemoval", method="POST"
     )
-    def create_negative_feedback_removal(self, order_id, **kwargs) -> ApiResponse:
+    async def create_negative_feedback_removal(self, order_id, **kwargs) -> ApiResponse:
         """
         create_negative_feedback_removal(self, order_id, **kwargs) -> ApiResponse
 
@@ -191,7 +190,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -201,7 +200,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/confirmOrderDetails", method="POST")
-    def create_confirm_order_details(self, order_id, **kwargs) -> ApiResponse:
+    async def create_confirm_order_details(self, order_id, **kwargs) -> ApiResponse:
         """
         create_confirm_order_details(self, order_id, **kwargs) -> ApiResponse
 
@@ -227,7 +226,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -239,7 +238,7 @@ class Messaging(Client):
     @sp_endpoint(
         "/messaging/v1/orders/{}/messages/confirmServiceDetails", method="POST"
     )
-    def create_confirm_service_details(self, order_id, **kwargs) -> ApiResponse:
+    async def create_confirm_service_details(self, order_id, **kwargs) -> ApiResponse:
         """
         create_confirm_service_details(self, order_id, **kwargs) -> ApiResponse
 
@@ -266,7 +265,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -276,7 +275,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/amazonMotors", method="POST")
-    def create_amazon_motors(self, order_id, **kwargs) -> ApiResponse:
+    async def create_amazon_motors(self, order_id, **kwargs) -> ApiResponse:
         """
         create_amazon_motors(self, order_id, **kwargs) -> ApiResponse
 
@@ -308,7 +307,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -318,7 +317,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/warranty", method="POST")
-    def create_warranty(self, order_id, **kwargs) -> ApiResponse:
+    async def create_warranty(self, order_id, **kwargs) -> ApiResponse:
         """
         create_warranty(self, order_id, **kwargs) -> ApiResponse
 
@@ -353,7 +352,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -363,7 +362,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/attributes", method="GET")
-    def get_attributes(self, order_id, **kwargs) -> ApiResponse:
+    async def get_attributes(self, order_id, **kwargs) -> ApiResponse:
         """
         get_attributes(self, order_id, **kwargs) -> ApiResponse
 
@@ -384,12 +383,12 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id), params=kwargs
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/digitalAccessKey", method="POST")
-    def create_digital_access_key(self, order_id, **kwargs) -> ApiResponse:
+    async def create_digital_access_key(self, order_id, **kwargs) -> ApiResponse:
         """
         create_digital_access_key(self, order_id, **kwargs) -> ApiResponse
 
@@ -422,7 +421,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -432,7 +431,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/unexpectedProblem", method="POST")
-    def create_unexpected_problem(self, order_id, **kwargs) -> ApiResponse:
+    async def create_unexpected_problem(self, order_id, **kwargs) -> ApiResponse:
         """
         create_unexpected_problem(self, order_id, **kwargs) -> ApiResponse
 
@@ -458,7 +457,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={
@@ -468,7 +467,7 @@ class Messaging(Client):
         )
 
     @sp_endpoint("/messaging/v1/orders/{}/messages/invoice", method="POST")
-    def send_invoice(self, order_id, **kwargs) -> ApiResponse:
+    async def send_invoice(self, order_id, **kwargs) -> ApiResponse:
         """
         send_invoice(self, order_id, **kwargs) -> ApiResponse
 
@@ -500,7 +499,7 @@ class Messaging(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), order_id),
             data=kwargs.pop("body"),
             params={

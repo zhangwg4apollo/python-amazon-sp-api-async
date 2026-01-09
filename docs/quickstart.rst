@@ -54,7 +54,9 @@ Example – credentials from code:
    )
 
    from sp_api.api import Orders
-   orders = Orders(credentials=credentials)
+   # Use async context manager
+   async with Orders(credentials=credentials) as orders:
+       ...
 
 Default marketplace
 -------------------
@@ -76,10 +78,12 @@ You can change this:
    from sp_api.api import Orders
 
    # Explicit marketplace
-   orders = Orders(marketplace=Marketplaces.DE)
+   async with Orders(marketplace=Marketplaces.DE) as orders:
+       ...
 
    # Or rely on SP_API_DEFAULT_MARKETPLACE:
-   orders = Orders()
+   async with Orders() as orders:
+       ...
 
 All endpoint clients share the same signature:
 
@@ -102,19 +106,18 @@ First request: get a single order
    from sp_api.base import Marketplaces
    from sp_api.api import Orders
 
-   client = Orders(marketplace=Marketplaces.DE)
+   async with Orders(marketplace=Marketplaces.DE) as client:
+       order = await client.get_order('YOUR-ORDER-ID')
 
-   order = client.get_order('YOUR-ORDER-ID')
-
-   # `order` is an ApiResponse
-   print(order.payload)   # raw response dict
-   print(order.Orders)    # helper to access payload['Orders'] when present
+       # `order` is an ApiResponse
+       print(order.payload)   # raw response dict
+       print(order.Orders)    # helper to access payload['Orders'] when present
 
 Fetching many orders with pagination
 ------------------------------------
 
 SP-API uses ``NextToken`` for pagination. This library ships a utility decorator
-that turns endpoint calls into a **generator** that automatically follows all pages.
+that turns endpoint calls into an **async generator** that automatically follows all pages.
 
 .. code-block:: python
 
@@ -125,14 +128,16 @@ that turns endpoint calls into a **generator** that automatically follows all pa
 
    @throttle_retry()      # retry on throttling
    @load_all_pages()      # follow NextToken automatically
-   def iter_orders(**kwargs):
-       return Orders().get_orders(**kwargs)
+   async def iter_orders(**kwargs):
+       async with Orders() as client:
+           return await client.get_orders(**kwargs)
 
-   for page in iter_orders(
-       LastUpdatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat()
-   ):
-       for order in page.payload.get('Orders', []):
-           print(order['AmazonOrderId'], order['OrderStatus'])
+   async def main():
+       async for page in iter_orders(
+           LastUpdatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat()
+       ):
+           for order in page.payload.get('Orders', []):
+               print(order['AmazonOrderId'], order['OrderStatus'])
 
 Notes:
 
@@ -167,24 +172,28 @@ Example: retry a single call:
    from sp_api.util import throttle_retry
 
    @throttle_retry(tries=10, delay=5, rate=1.3)
-   def get_orders(**kwargs):
-       return Orders().get_orders(**kwargs)
+   async def get_orders(**kwargs):
+       async with Orders() as client:
+           return await client.get_orders(**kwargs)
 
-   res = get_orders(CreatedAfter='2024-01-01T00:00:00Z')
+   res = await get_orders(CreatedAfter='2024-01-01T00:00:00Z')
 
 Combining retries and auto-pagination:
 
 .. code-block:: python
 
+   from sp_api.api import Orders
    from sp_api.util import sp_retry, load_all_pages
 
    @sp_retry(tries=10, delay=10, rate=1.2)
    @load_all_pages()
-   def get_all_orders(**kwargs):
-       return Orders().get_orders(**kwargs)
+   async def get_all_orders(**kwargs):
+       async with Orders() as client:
+           return await client.get_orders(**kwargs)
 
-   for page in get_all_orders(CreatedAfter='2024-01-01T00:00:00Z'):
-       ...
+   async def main():
+       async for page in get_all_orders(CreatedAfter='2024-01-01T00:00:00Z'):
+           ...
 
 Creating reports
 ----------------
@@ -198,15 +207,14 @@ Creating a report with :class:`sp_api.api.ReportsV2`:
    from sp_api.api import ReportsV2
    from sp_api.base.reportTypes import ReportType
 
-   reports = ReportsV2()
+   async with ReportsV2() as reports:
+       res = await reports.create_report(
+           reportType=ReportType.GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL,
+           dataStartTime=(datetime.utcnow() - timedelta(days=7)).isoformat(),
+           dataEndTime=(datetime.utcnow() - timedelta(days=1)).isoformat(),
+       )
 
-   res = reports.create_report(
-       reportType=ReportType.GET_FLAT_FILE_ALL_ORDERS_DATA_BY_LAST_UPDATE_GENERAL,
-       dataStartTime=(datetime.utcnow() - timedelta(days=7)).isoformat(),
-       dataEndTime=(datetime.utcnow() - timedelta(days=1)).isoformat(),
-   )
-
-   print(res.payload)  # contains the report id
+       print(res.payload)  # contains the report id
 
 Submitting feeds
 ----------------
@@ -215,12 +223,13 @@ Submitting feeds
 
    from sp_api.api import Feeds
 
-   with open("my_feed_file.tsv", "rb") as f:
-       Feeds().submit_feed(
-           feed_type="POST_PRODUCT_DATA",   # use your feed type
-           file=f,
-           content_type="text/tsv",
-       )
+   async with Feeds() as feeds_client:
+       with open("my_feed_file.tsv", "rb") as f:
+           await feeds_client.submit_feed(
+               feed_type="POST_PRODUCT_DATA",   # use your feed type
+               file=f,
+               content_type="text/tsv",
+           )
 
 Working with PII (Restricted Data Token)
 ----------------------------------------
@@ -241,12 +250,11 @@ For those, you must:
 
    rdt = "YOUR_RESTRICTED_DATA_TOKEN"
 
-   orders = Orders(restricted_data_token=rdt)
-
-   res = orders.get_orders(
-       LastUpdatedAfter="2024-01-01T00:00:00Z",
-       # and any RestrictedResources required by Amazon
-   )
+   async with Orders(restricted_data_token=rdt) as orders:
+       res = await orders.get_orders(
+           LastUpdatedAfter="2024-01-01T00:00:00Z",
+           # and any RestrictedResources required by Amazon
+       )
 
 Next steps
 ----------

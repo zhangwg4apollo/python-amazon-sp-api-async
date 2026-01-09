@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class Authorization(Client):
@@ -14,7 +13,7 @@ class Authorization(Client):
     grantless_scope = "sellingpartnerapi::migration"
 
     @sp_endpoint("/authorization/v1/authorizationCode", method="GET")
-    def get_authorization_code(self, **kwargs) -> ApiResponse:
+    async def get_authorization_code(self, **kwargs) -> ApiResponse:
         """
         get_authorization_code(self, **kwargs) -> ApiResponse
 
@@ -50,4 +49,4 @@ class Authorization(Client):
             ApiResponse:
         """
 
-        return self._request_grantless_operation(kwargs.pop("path"), params=kwargs)
+        return await self._request_grantless_operation(kwargs.pop("path"), params=kwargs)

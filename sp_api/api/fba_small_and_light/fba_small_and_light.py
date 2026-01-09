@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse, deprecated
 
@@ -18,7 +17,7 @@ class FbaSmallAndLight(Client):
         return self.get_small_and_light_enrollment_by_seller_sku(sellerSKU, **kwargs)
 
     @sp_endpoint("/fba/smallAndLight/v1/enrollments/{}", method="GET")
-    def get_small_and_light_enrollment_by_seller_sku(
+    async def get_small_and_light_enrollment_by_seller_sku(
         self, seller_sku, **kwargs
     ) -> ApiResponse:
         """
@@ -44,7 +43,7 @@ class FbaSmallAndLight(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), seller_sku), params=kwargs
         )
 
@@ -55,7 +54,7 @@ class FbaSmallAndLight(Client):
         return self.put_small_and_light_enrollment_by_seller_sku(sellerSKU, **kwargs)
 
     @sp_endpoint("/fba/smallAndLight/v1/enrollments/{}", method="PUT")
-    def put_small_and_light_enrollment_by_seller_sku(
+    async def put_small_and_light_enrollment_by_seller_sku(
         self, seller_sku, **kwargs
     ) -> ApiResponse:
         """
@@ -82,7 +81,7 @@ class FbaSmallAndLight(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), seller_sku),
             params={
                 "marketplaceIds": kwargs.get("marketplaceIds", self.marketplace_id)
@@ -96,7 +95,7 @@ class FbaSmallAndLight(Client):
         return self.delete_small_and_light_enrollment_by_seller_sku(sellerSKU, **kwargs)
 
     @sp_endpoint("/fba/smallAndLight/v1/enrollments/{}", method="DELETE")
-    def delete_small_and_light_enrollment_by_seller_sku(
+    async def delete_small_and_light_enrollment_by_seller_sku(
         self, seller_sku, **kwargs
     ) -> ApiResponse:
         """
@@ -122,7 +121,7 @@ class FbaSmallAndLight(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), seller_sku), data=kwargs
         )
 
@@ -133,7 +132,7 @@ class FbaSmallAndLight(Client):
         return self.get_small_and_light_eligibility_by_seller_sku(sellerSKU, **kwargs)
 
     @sp_endpoint("/fba/smallAndLight/v1/eligibilities/{}", method="GET")
-    def get_small_and_light_eligibility_by_seller_sku(
+    async def get_small_and_light_eligibility_by_seller_sku(
         self, seller_sku, **kwargs
     ) -> ApiResponse:
         """
@@ -160,12 +159,12 @@ class FbaSmallAndLight(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), seller_sku), params=kwargs
         )
 
     @sp_endpoint("/fba/smallAndLight/v1/feePreviews", method="POST")
-    def get_small_and_light_fee_preview(self, **kwargs) -> ApiResponse:
+    async def get_small_and_light_fee_preview(self, **kwargs) -> ApiResponse:
         """
         get_small_and_light_fee_preview(self, **kwargs) -> ApiResponse
 
@@ -201,4 +200,4 @@ class FbaSmallAndLight(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)

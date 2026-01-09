@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class Replenishment(Client):
@@ -16,7 +15,7 @@ class Replenishment(Client):
     @sp_endpoint(
         "/replenishment/2022-11-07/sellingPartners/metrics/search", method="POST"
     )
-    def get_selling_partner_metrics(self, **kwargs) -> ApiResponse:
+    async def get_selling_partner_metrics(self, **kwargs) -> ApiResponse:
         """
         get_selling_partner_metrics(self, **kwargs) -> ApiResponse
 
@@ -53,10 +52,10 @@ class Replenishment(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/replenishment/2022-11-07/offers/metrics/search", method="POST")
-    def list_offer_metrics(self, **kwargs) -> ApiResponse:
+    async def list_offer_metrics(self, **kwargs) -> ApiResponse:
         """
         list_offer_metrics(self, **kwargs) -> ApiResponse
 
@@ -85,10 +84,10 @@ class Replenishment(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/replenishment/2022-11-07/offers/search", method="POST")
-    def list_offers(self, **kwargs) -> ApiResponse:
+    async def list_offers(self, **kwargs) -> ApiResponse:
         """
         list_offers(self, **kwargs) -> ApiResponse
 
@@ -117,4 +116,4 @@ class Replenishment(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)

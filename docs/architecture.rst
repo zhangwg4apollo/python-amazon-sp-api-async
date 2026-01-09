@@ -29,7 +29,8 @@ When you do:
 
    from sp_api.api import Orders
 
-   client = Orders()
+   async with Orders() as client:
+       ...
 
 the following happens internally:
 
@@ -59,12 +60,12 @@ Key steps:
   * ``user-agent`` – a library user agent
   * ``host`` – derived from the marketplace endpoint
 
-* The request is sent using :func:`requests.request`.
+* The request is sent using :class:`httpx.AsyncClient`.
 
 Response handling
 -----------------
 
-Responses are normal ``requests`` responses but wrapped into
+Responses are normal ``httpx`` responses but wrapped into
 :class:`sp_api.base.ApiResponse` via ``Client._check_response``.
 
 * On success, the JSON body is parsed into the ``payload`` attribute.
@@ -116,10 +117,10 @@ Two special cases:
 Retry & pagination utilities
 ----------------------------
 
-The :mod:`sp_api.util` module provides decorators that work with any endpoint
+The :mod:`sp_api.util` module provides decorators that work with any async endpoint
 methods returning an :class:`sp_api.base.ApiResponse`:
 
-* :func:`sp_api.util.load_all_pages` – transforms a function into a generator
+* :func:`sp_api.util.load_all_pages` – transforms an async function into an async generator
   that automatically follows ``NextToken`` (or another token name you configure).
 * :func:`sp_api.util.throttle_retry` – retries on throttling exceptions
   (HTTP 429 / :class:`sp_api.base.SellingApiRequestThrottledException`).
@@ -127,6 +128,7 @@ methods returning an :class:`sp_api.base.ApiResponse`:
 
 These utilities are intentionally decoupled: you can apply them to your own
 wrappers around endpoint calls without changing the endpoint clients themselves.
+All utilities support async/await patterns.
 
 Extending with new endpoints
 ----------------------------

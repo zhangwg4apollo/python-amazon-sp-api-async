@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class Tokens(Client):
@@ -12,7 +11,7 @@ class Tokens(Client):
     """
 
     @sp_endpoint("/tokens/2021-03-01/restrictedDataToken", method="POST")
-    def create_restricted_data_token(self, **kwargs) -> ApiResponse:
+    async def create_restricted_data_token(self, **kwargs) -> ApiResponse:
         """
         create_restricted_data_token(self, **kwargs) -> ApiResponse
 
@@ -35,7 +34,7 @@ class Tokens(Client):
         Examples:
             literal blocks::
 
-                Tokens().create_restricted_data_token(restrictedResources=[
+                await Tokens().create_restricted_data_token(restrictedResources=[
                      {
                          "method": "GET",
                          "path": "/orders/v0/orders",
@@ -61,4 +60,4 @@ class Tokens(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)

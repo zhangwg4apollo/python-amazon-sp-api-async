@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class VendorShipments(Client):
@@ -12,7 +11,7 @@ class VendorShipments(Client):
     """
 
     @sp_endpoint("/vendor/shipping/v1/shipmentConfirmations", method="POST")
-    def submit_shipment_confirmations(self, **kwargs) -> ApiResponse:
+    async def submit_shipment_confirmations(self, **kwargs) -> ApiResponse:
         """
         submit_shipment_confirmations(self, **kwargs) -> ApiResponse
 
@@ -37,10 +36,10 @@ class VendorShipments(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/vendor/shipping/v1/shipments", method="POST")
-    def submit_shipments(self, **kwargs) -> ApiResponse:
+    async def submit_shipments(self, **kwargs) -> ApiResponse:
         """
         submit_shipments(self, **kwargs) -> ApiResponse
 
@@ -65,10 +64,10 @@ class VendorShipments(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/vendor/shipping/v1/shipments", method="GET")
-    def get_shipment_details(self, **kwargs) -> ApiResponse:
+    async def get_shipment_details(self, **kwargs) -> ApiResponse:
         """
         get_shipment_details(self, **kwargs) -> ApiResponse
 
@@ -114,4 +113,4 @@ class VendorShipments(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)

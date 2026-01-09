@@ -27,7 +27,8 @@ If you're only using one account, place it under default. You can pass the accou
 
     .. code-block:: python
 
-        Orders(refresh_token='...')
+        async with Orders(refresh_token='...') as client:
+            ...
 
 ..  code-block:: yaml
 
@@ -51,7 +52,10 @@ Usage with default account
 
 ..  code-block:: python
 
-    Orders().get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+    from datetime import datetime, timedelta
+
+    async with Orders() as client:
+        await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 
 
 **************************
@@ -62,7 +66,10 @@ You can use every account's name from the config file for account
 
 ..  code-block:: python
 
-    Orders(account=another_account).get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+    from datetime import datetime, timedelta
+
+    async with Orders(account=another_account) as client:
+        await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 
 .. note::
 
@@ -70,7 +77,10 @@ You can use every account's name from the config file for account
 
     ..  code-block:: python
 
-        Orders(account='another_account', refresh_token='<refresh_token_for_this_request>').get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
+        from datetime import datetime, timedelta
+
+        async with Orders(account='another_account', refresh_token='<refresh_token_for_this_request>') as client:
+            await client.get_orders(CreatedAfter=(datetime.utcnow() - timedelta(days=7)).isoformat())
 
 
 **********

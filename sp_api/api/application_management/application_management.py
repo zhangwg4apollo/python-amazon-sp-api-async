@@ -1,4 +1,4 @@
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class ApplicationManagement(Client):
@@ -11,7 +11,7 @@ class ApplicationManagement(Client):
     grantless_scope = 'sellingpartnerapi::client_credential:rotation'
 
     @sp_endpoint("/applications/2023-11-30/clientSecret", method="POST")
-    def rotate_application_client_secret(self, **kwargs) -> ApiResponse:
+    async def rotate_application_client_secret(self, **kwargs) -> ApiResponse:
         """
         rotate_application_client_secret(self, **kwargs) -> ApiResponse
 
@@ -32,4 +32,4 @@ class ApplicationManagement(Client):
             ApiResponse:
         """
 
-        return self._request_grantless_operation(kwargs.pop("path"), data=kwargs)
+        return await self._request_grantless_operation(kwargs.pop("path"), data=kwargs)

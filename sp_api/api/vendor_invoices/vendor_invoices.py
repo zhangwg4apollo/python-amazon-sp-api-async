@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class VendorInvoices(Client):
@@ -12,7 +11,7 @@ class VendorInvoices(Client):
     """
 
     @sp_endpoint("/vendor/payments/v1/invoices", method="POST")
-    def submit_invoices(self, data, **kwargs) -> ApiResponse:
+    async def submit_invoices(self, data, **kwargs) -> ApiResponse:
         """
         submit_invoices(self, data, **kwargs) -> ApiResponse
 
@@ -289,6 +288,6 @@ class VendorInvoices(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"), data={**data, **kwargs}, add_marketplace=False
         )

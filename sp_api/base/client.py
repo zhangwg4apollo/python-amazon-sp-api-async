@@ -1,11 +1,9 @@
-import hashlib
 import json
 from datetime import datetime
 import logging
 import os
 
-from requests import request
-from requests.exceptions import JSONDecodeError
+import httpx
 
 from sp_api.auth import AccessTokenClient, AccessTokenResponse
 from .ApiResponse import ApiResponse
@@ -63,28 +61,42 @@ class Client(BaseClient):
         self.timeout = timeout
         self.version = version
         self.verify = verify
+        # httpx timeout can be a number (seconds) or httpx.Timeout object
+        httpx_timeout = timeout if timeout is not None else 30.0
+        self._client = httpx.AsyncClient(
+            proxy=proxies,
+            verify=verify,
+            timeout=httpx_timeout
+        )
 
     @property
     def headers(self):
         return {
             "host": self.endpoint[8:],
             "user-agent": self.user_agent,
-            "x-amz-access-token": self.restricted_data_token or self.auth.access_token,
             "x-amz-date": datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"),
             "content-type": "application/json",
         }
 
-    @property
-    def auth(self) -> AccessTokenResponse:
-        return self._auth.get_auth()
+    async def _get_headers(self):
+        auth = await self.auth()
+        return {
+            "host": self.endpoint[8:],
+            "user-agent": self.user_agent,
+            "x-amz-access-token": self.restricted_data_token or auth.access_token,
+            "x-amz-date": datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"),
+            "content-type": "application/json",
+        }
 
-    @property
-    def grantless_auth(self) -> AccessTokenResponse:
+    async def auth(self) -> AccessTokenResponse:
+        return await self._auth.get_auth()
+
+    async def grantless_auth(self) -> AccessTokenResponse:
         if not self.grantless_scope:
             raise MissingScopeException("Grantless operations require scope")
-        return self._auth.get_grantless_auth(self.grantless_scope)
+        return await self._auth.get_grantless_auth(self.grantless_scope)
 
-    def _request(
+    async def _request(
         self,
         path: str,
         *,
@@ -110,29 +122,30 @@ class Client(BaseClient):
         if add_marketplace:
             self._add_marketplaces(data if self.method in ("POST", "PUT") else params)
 
+        request_headers = headers
+        if request_headers is None:
+            request_headers = await self._get_headers()
+
         log.debug("HTTP Method: %s", self.method)
         log.debug("Making request to URL: %s", self.endpoint + self._check_version(path))
         log.debug("Request Params: %s", params)
         log.debug("Request Data: %s", data if self.method in ("POST", "PUT", "PATCH") else None)
-        log.debug("Request Headers: %s", headers or self.headers)
+        log.debug("Request Headers: %s", request_headers)
 
-        res = request(
-            self.method,
-            self.endpoint + self._check_version(path),
-            params=params,
-            data=(
-                json.dumps(data)
-                if data and self.method in ("POST", "PUT", "PATCH")
-                else None
-            ),
-            headers=headers or self.headers,
-            timeout=self.timeout,
-            proxies=self.proxies,
-            verify=self.verify,
-        )
-        return self._check_response(res, res_no_data, bulk, wrap_list)
+        request_kwargs = {
+            "method": self.method,
+            "url": self.endpoint + self._check_version(path),
+            "params": params,
+            "headers": request_headers,
+        }
 
-    def _check_response(
+        if data and self.method in ("POST", "PUT", "PATCH"):
+            request_kwargs["content"] = json.dumps(data).encode("utf-8")
+
+        res = await self._client.request(**request_kwargs)
+        return await self._check_response(res, res_no_data, bulk, wrap_list)
+
+    async def _check_response(
         self,
         res,
         res_no_data: bool = False,
@@ -142,12 +155,12 @@ class Client(BaseClient):
         if (self.method == "DELETE" or res_no_data) and 200 <= res.status_code < 300:
             try:
                 js = res.json() or {}
-            except JSONDecodeError:
+            except (ValueError, httpx.DecodeError):
                 js = {"status_code": res.status_code}
         else:
             try:
                 js = res.json() or {}
-            except JSONDecodeError:
+            except (ValueError, httpx.DecodeError):
                 js = {}
 
         log.debug("Response before list handling: %s", js)
@@ -165,10 +178,10 @@ class Client(BaseClient):
         if error:
             log.error("Error Response: %s", error)
             exception = get_exception_for_code(res.status_code)
-            raise exception(error, headers=res.headers)
+            raise exception(error, headers=dict(res.headers))
 
         log.debug("Response: %s", js)
-        return ApiResponse(**js, headers=res.headers)
+        return ApiResponse(**js, headers=dict(res.headers))
 
     def _add_marketplaces(self, data):
         POST = ["marketplaceIds", "MarketplaceIds"]
@@ -196,13 +209,14 @@ class Client(BaseClient):
             }
         )
 
-    def _request_grantless_operation(
+    async def _request_grantless_operation(
         self, path: str, *, data: dict = None, params: dict = None
     ):
+        grantless_auth = await self.grantless_auth()
         headers = {
             "host": self.endpoint[8:],
             "user-agent": self.user_agent,
-            "x-amz-access-token": self.grantless_auth.access_token,
+            "x-amz-access-token": grantless_auth.access_token,
             "x-amz-date": datetime.utcnow().strftime("%Y%m%dT%H%M%SZ"),
             "content-type": "application/json",
         }
@@ -210,18 +224,24 @@ class Client(BaseClient):
         log.debug("Making request to URL: %s", self.endpoint + self._check_version(path))
         log.debug("Request Params: %s", params)
         log.debug("Request Data: %s", data if self.method in ("POST", "PUT", "PATCH") else None)
-        log.debug("Request Headers: %s", headers or self.headers)
-        return self._request(path, data=data, params=params, headers=headers)
+        log.debug("Request Headers: %s", headers)
+        return await self._request(path, data=data, params=params, headers=headers)
 
     def _check_version(self, path):
         if "<version>" not in path:
             return path
         return path.replace("<version>", self.version)
 
-    def __enter__(self):
+    async def __aenter__(self):
         self.keep_restricted_data_token = True
         return self
 
-    def __exit__(self, *args, **kwargs):
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
         self.restricted_data_token = None
         self.keep_restricted_data_token = False
+        await self.aclose()
+
+    async def aclose(self):
+        await self._client.aclose()
+        if hasattr(self._auth, 'aclose'):
+            await self._auth.aclose()

@@ -1,4 +1,5 @@
 import os
+import pytest
 from unittest import mock
 
 from sp_api.base.credential_provider import FromCachedSecretsCredentialProvider
@@ -9,7 +10,8 @@ LWA_APP_ID = '<lwa_app_id>'
 LWA_CLIENT_SECRET = '<lwa_client_secret>'
 
 
-def test_from_cached_secrets_cp_without_secret_id_set():
+@pytest.mark.asyncio
+async def test_from_cached_secrets_cp_without_secret_id_set():
     with mock.patch.dict(os.environ, {"SP_API_AWS_SECRET_ID": ""}):
         cp = FromCachedSecretsCredentialProvider()
         cp.load_credentials()
@@ -17,7 +19,8 @@ def test_from_cached_secrets_cp_without_secret_id_set():
     assert cp.credentials is None
 
 
-def test_from_cached_secrets_cp_without_cache_available():
+@pytest.mark.asyncio
+async def test_from_cached_secrets_cp_without_cache_available():
     with mock.patch.dict(os.environ, {"SP_API_AWS_SECRET_ID": "test"}), \
             mock.patch.object(FromCachedSecretsCredentialProvider, "_get_secret_cache", return_value=None):
         cp = FromCachedSecretsCredentialProvider()
@@ -26,7 +29,8 @@ def test_from_cached_secrets_cp_without_cache_available():
     assert cp.credentials is None
 
 
-def test_from_cached_secrets_cp_with_cache_available():
+@pytest.mark.asyncio
+async def test_from_cached_secrets_cp_with_cache_available():
     secret_content = {
         "SP_API_REFRESH_TOKEN": REFRESH_TOKEN,
         "LWA_APP_ID": LWA_APP_ID,

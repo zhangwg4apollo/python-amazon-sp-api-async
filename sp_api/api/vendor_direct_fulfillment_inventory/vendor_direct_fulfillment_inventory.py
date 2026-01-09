@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -14,7 +13,7 @@ class VendorDirectFulfillmentInventory(Client):
     @sp_endpoint(
         "/vendor/directFulfillment/inventory/v1/warehouses/{}/items", method="POST"
     )
-    def submit_inventory_update(self, warehouseId, **kwargs) -> ApiResponse:
+    async def submit_inventory_update(self, warehouseId, **kwargs) -> ApiResponse:
         """
         submit_inventory_update(self, warehouseId, **kwargs) -> ApiResponse
 
@@ -56,7 +55,7 @@ class VendorDirectFulfillmentInventory(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), warehouseId),
             data=kwargs,
             add_marketplace=False,

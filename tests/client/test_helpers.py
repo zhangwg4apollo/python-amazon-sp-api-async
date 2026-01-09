@@ -1,5 +1,4 @@
-import enum
-import os
+import pytest
 from datetime import datetime, timedelta
 from io import BytesIO
 
@@ -31,7 +30,8 @@ test_obj = {
 }
 
 
-def test_key_maker_from_dict():
+@pytest.mark.asyncio
+async def test_key_maker_from_dict():
     r = KeyMaker(key_mapping, deep=True).convert_keys(test_obj)
     assert isinstance(r, dict)
     assert r.get('sku') == 1
@@ -40,7 +40,8 @@ def test_key_maker_from_dict():
     assert isinstance(r.get('title').get('sku'), list)
 
 
-def test_key_maker_from_list():
+@pytest.mark.asyncio
+async def test_key_maker_from_list():
     r = KeyMaker(key_mapping, deep=True).convert_keys([test_obj])
     assert isinstance(r, list)
     assert len(r) == 1
@@ -51,7 +52,8 @@ def test_key_maker_from_list():
     assert isinstance(r[0].get('title').get('sku'), list)
 
 
-def test_key_maker_from_dict_not_deep():
+@pytest.mark.asyncio
+async def test_key_maker_from_dict_not_deep():
     r = KeyMaker(key_mapping, deep=False).convert_keys(test_obj)
     assert r.get('sku') == 1
     assert r.get('seller_sku') is None
@@ -59,27 +61,32 @@ def test_key_maker_from_dict_not_deep():
     assert isinstance(r.get('title').get('sellerSku'), list)
 
 
-def test_load_all_pages():
+@pytest.mark.asyncio
+async def test_load_all_pages():
     @throttle_retry()
     @load_all_pages(extras=dict(QueryType='NEXT_TOKEN'))
-    def load_shipments(**kwargs):
-        return FulfillmentInbound().get_shipments(**kwargs)
+    async def load_shipments(**kwargs):
+        async with FulfillmentInbound() as client:
+            return await client.get_shipments(**kwargs)
 
-    for x in load_shipments(QueryType='SHIPMENT'):
+    async for x in load_shipments(QueryType='SHIPMENT'):
         assert x.payload is not None
 
 
-def test_load_all_pages_orders():
+@pytest.mark.asyncio
+async def test_load_all_pages_orders():
     @throttle_retry()
     @load_all_pages()
-    def load_all_orders(**kwargs):
-        return Orders().get_orders(**kwargs)
+    async def load_all_orders(**kwargs):
+        async with Orders() as client:
+            return await client.get_orders(**kwargs)
 
-    for x in load_all_orders(CreatedAfter='TEST_CASE_200', MarketplaceIds=["ATVPDKIKX0DER"]):
+    async for x in load_all_orders(CreatedAfter='TEST_CASE_200', MarketplaceIds=["ATVPDKIKX0DER"]):
         assert x.payload is not None
 
 
-def test_make_sleep_time():
+@pytest.mark.asyncio
+async def test_make_sleep_time():
     x = make_sleep_time(2, False, 2)
     assert x == 2
 
@@ -87,16 +94,19 @@ def test_make_sleep_time():
     assert y == 0.5
 
 
-def test_load_all_pages1():
+@pytest.mark.asyncio
+async def test_load_all_pages1():
     x = load_all_pages()
     assert x is not None
 
 
-def test_fill_query_params():
+@pytest.mark.asyncio
+async def test_fill_query_params():
     assert fill_query_params('{}/{}', 'foo', 'bar') == 'foo/bar'
 
 
-def test_sp_endpoint_():
+@pytest.mark.asyncio
+async def test_sp_endpoint_():
     assert sp_endpoint('foo') is not None
 
     @sp_endpoint('/api/call', method='POST')
@@ -107,7 +117,8 @@ def test_sp_endpoint_():
     assert my_endpoint.__name__ == 'my_endpoint'
 
 
-def test_create_md5():
+@pytest.mark.asyncio
+async def test_create_md5():
     b = BytesIO()
     b.write(b'foo')
     b.seek(0)
@@ -115,7 +126,8 @@ def test_create_md5():
     assert m == 'rL0Y20zC+Fzt72VPzMSk2A=='
 
 
-def test_nest_dict():
+@pytest.mark.asyncio
+async def test_nest_dict():
     x = nest_dict({
         "AmazonOrderId":1,
         "ShipFromAddress.Name" : "Seller",
@@ -124,7 +136,8 @@ def test_nest_dict():
     assert x['ShipFromAddress']['AddressLine1'] == 'Street'
 
 
-def test_deprecated():
+@pytest.mark.asyncio
+async def test_deprecated():
     assert deprecated(lambda x: x + 1)(1) == 2
 
 
@@ -133,7 +146,8 @@ def dummy(**kwargs):
     return lambda: kwargs
 
 
-def test_load_date_bound():
+@pytest.mark.asyncio
+async def test_load_date_bound():
     start = datetime.now() - timedelta(days=70)
     end = datetime.now()
     x = list(dummy(dataStartTime=start, dataEndTime=end))

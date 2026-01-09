@@ -1,6 +1,5 @@
 import zlib
 
-import requests
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -14,7 +13,7 @@ class Feeds(Client):
     """
 
     @sp_endpoint("/feeds/2021-06-30/feeds", method="GET")
-    def get_feeds(self, **kwargs) -> ApiResponse:
+    async def get_feeds(self, **kwargs) -> ApiResponse:
         """
         get_feeds(self, **kwargs) -> ApiResponse
 
@@ -34,12 +33,12 @@ class Feeds(Client):
             ApiResponse:
         """
 
-        add_marketplace = not "nextToken" in kwargs
-        return self._request(
+        add_marketplace = "nextToken" not in kwargs
+        return await self._request(
             kwargs.pop("path"), params=kwargs, add_marketplace=add_marketplace
         )
 
-    def submit_feed(
+    async def submit_feed(
         self, feed_type, file, content_type="text/tsv", **kwargs
     ) -> [ApiResponse, ApiResponse]:
         """
@@ -72,13 +71,13 @@ class Feeds(Client):
         Returns:
             [ApiResponse:, ApiResponse:]
         """
-        document_response = self.create_feed_document(file, content_type)
-        return document_response, self.create_feed(
+        document_response = await self.create_feed_document(file, content_type)
+        return document_response, await self.create_feed(
             feed_type, document_response.payload.get("feedDocumentId"), **kwargs
         )
 
     @sp_endpoint("/feeds/2021-06-30/feeds", method="POST")
-    def create_feed(self, feed_type, input_feed_document_id, **kwargs) -> ApiResponse:
+    async def create_feed(self, feed_type, input_feed_document_id, **kwargs) -> ApiResponse:
         """
         create_feed(self, feed_type: str, input_feed_document_id: str, **kwargs) -> ApiResponse
 
@@ -114,10 +113,10 @@ class Feeds(Client):
             "inputFeedDocumentId": input_feed_document_id,
             **kwargs,
         }
-        return self._request(kwargs.pop("path"), data=data)
+        return await self._request(kwargs.pop("path"), data=data)
 
     @sp_endpoint("/feeds/2021-06-30/feeds/{}", method="DELETE")
-    def cancel_feed(self, feedId, **kwargs) -> ApiResponse:
+    async def cancel_feed(self, feedId, **kwargs) -> ApiResponse:
         """
         cancel_feed(self, feedId, **kwargs) -> ApiResponse
 
@@ -132,10 +131,10 @@ class Feeds(Client):
             ApiResponse:
         """
 
-        return self._request(fill_query_params(kwargs.pop("path"), feedId), data=kwargs)
+        return await self._request(fill_query_params(kwargs.pop("path"), feedId), data=kwargs)
 
     @sp_endpoint("/feeds/2021-06-30/feeds/{}", method="GET")
-    def get_feed(self, feedId, **kwargs) -> ApiResponse:
+    async def get_feed(self, feedId, **kwargs) -> ApiResponse:
         """
         get_feed(self, feedId, **kwargs) -> ApiResponse
 
@@ -150,14 +149,14 @@ class Feeds(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), feedId),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/feeds/2021-06-30/documents", method="POST")
-    def create_feed_document(self, file, content_type, **kwargs) -> ApiResponse:
+    async def create_feed_document(self, file, content_type, **kwargs) -> ApiResponse:
         """
         create_feed_document(self, **kwargs) -> ApiResponse
 
@@ -175,7 +174,7 @@ class Feeds(Client):
             ApiResponse:
         """
         data = {"contentType": kwargs.get("contentType", content_type)}
-        response = self._request(kwargs.get("path"), data={**data, **kwargs})
+        response = await self._request(kwargs.get("path"), data={**data, **kwargs})
 
         if file is None:
             return response
@@ -185,21 +184,25 @@ class Feeds(Client):
             upload_data = upload_data.encode("iso-8859-1")
         except AttributeError:
             pass
-        upload = requests.put(
+        upload = await self._client.put(
             response.payload.get("url"),
-            data=upload_data,
+            content=upload_data,
             headers={"Content-Type": content_type},
         )
         if 200 <= upload.status_code < 300:
             return response
         from sp_api.base.exceptions import SellingApiException
 
+        try:
+            error_data = upload.json().get("errors")
+        except Exception:
+            error_data = None
         raise SellingApiException(
-            headers=upload.headers, error=upload.json().get("errors")
+            headers=dict(upload.headers), error=error_data
         )
 
     @sp_endpoint("/feeds/2021-06-30/documents/{}", method="GET")
-    def get_feed_document(self, feedDocumentId, **kwargs) -> str:
+    async def get_feed_document(self, feedDocumentId, **kwargs) -> str:
         """
         get_feed_document(self, feedDocumentId, **kwargs) -> ApiResponse
 
@@ -216,10 +219,10 @@ class Feeds(Client):
             ApiResponse:
         """
 
-        return self.get_feed_result_document(feedDocumentId)
+        return await self.get_feed_result_document(feedDocumentId)
 
     @sp_endpoint("/feeds/2021-06-30/documents/{}", method="GET")
-    def get_feed_result_document(self, feedDocumentId, **kwargs) -> str:
+    async def get_feed_result_document(self, feedDocumentId, **kwargs) -> str:
         """
         get_feed_result_document(self, feedDocumentId, **kwargs) -> str
 
@@ -234,19 +237,20 @@ class Feeds(Client):
         Returns:
             str:
         """
-        response = self._request(
+        response = await self._request(
             fill_query_params(kwargs.pop("path"), feedDocumentId),
             params=kwargs,
             add_marketplace=False,
         )
         url = response.payload.get("url")
-        doc_response = requests.get(url)
+        doc_response = await self._client.get(url)
 
-        encoding = (
-            doc_response.encoding
-            if doc_response and doc_response.encoding
-            else "iso-8859-1"
-        )
+        # httpx doesn't have encoding attribute, try to get from headers
+        content_type = doc_response.headers.get("content-type", "")
+        if "charset=" in content_type:
+            encoding = content_type.split("charset=")[1].split(";")[0].strip()
+        else:
+            encoding = "iso-8859-1"
         if encoding.lower() == "windows-31j":
             encoding = "cp932"
 

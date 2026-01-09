@@ -1,6 +1,5 @@
 import enum
 import os
-import urllib.parse
 from datetime import datetime
 
 from sp_api.base import (
@@ -66,7 +65,7 @@ class Shipping(Client):
         }
 
     @sp_endpoint("/shipping/v2/shipments/rates", method="POST")
-    def get_rates(self, **kwargs) -> ApiResponse:
+    async def get_rates(self, **kwargs) -> ApiResponse:
         """
         get_rates(self, **kwargs) -> ApiResponse
 
@@ -244,10 +243,10 @@ class Shipping(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
 
     @sp_endpoint("/shipping/v2/shipments", method="POST")
-    def purchase_shipment(self, **kwargs) -> ApiResponse:
+    async def purchase_shipment(self, **kwargs) -> ApiResponse:
         """
         purchase_shipment(self, **kwargs) -> ApiResponse
 
@@ -292,10 +291,10 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
 
     @sp_endpoint("/shipping/v2/oneClickShipment", method="POST")
-    def one_click_shipment(self, **kwargs) -> ApiResponse:
+    async def one_click_shipment(self, **kwargs) -> ApiResponse:
         """
         one_click_shipment(self, **kwargs) -> ApiResponse
 
@@ -480,10 +479,10 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
 
     @sp_endpoint("/shipping/v2/tracking", method="GET")
-    def get_tracking(self, **kwargs) -> ApiResponse:
+    async def get_tracking(self, **kwargs) -> ApiResponse:
         """
         get_tracking(self, **kwargs) -> ApiResponse
 
@@ -506,10 +505,10 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
 
     @sp_endpoint("/shipping/v2/shipments/{}/documents", method="GET")
-    def get_shipment_documents(self, shipmentId, **kwargs) -> ApiResponse:
+    async def get_shipment_documents(self, shipmentId, **kwargs) -> ApiResponse:
         """
         get_shipment_documents(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -535,14 +534,14 @@ class Shipping(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/shipping/v2/shipments/{}/cancel", method="PUT")
-    def cancel_shipment(self, shipmentId, **kwargs) -> ApiResponse:
+    async def cancel_shipment(self, shipmentId, **kwargs) -> ApiResponse:
         """
         cancel_shipment(self, shipmentId, **kwargs) -> ApiResponse
 
@@ -564,14 +563,14 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipmentId),
             data=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/shipping/v2/accessPoints", method="GET")
-    def get_access_points(self, **kwargs) -> ApiResponse:
+    async def get_access_points(self, **kwargs) -> ApiResponse:
         """
         get_access_points(self, **kwargs) -> ApiResponse
 
@@ -595,10 +594,10 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
 
     @sp_endpoint("/shipping/v2/ndrFeedback", method="POST")
-    def submit_ndr_feedback(self, **kwargs) -> ApiResponse:
+    async def submit_ndr_feedback(self, **kwargs) -> ApiResponse:
         """
         submit_ndr_feedback(self, **kwargs) -> ApiResponse
 
@@ -627,10 +626,10 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), data=kwargs, add_marketplace=False)
 
     @sp_endpoint("/shipping/v2/shipments/additionalInputs/schema", method="GET")
-    def get_additional_inputs(self, **kwargs) -> ApiResponse:
+    async def get_additional_inputs(self, **kwargs) -> ApiResponse:
         """
         get_additional_inputs(self, **kwargs) -> ApiResponse
 
@@ -653,4 +652,4 @@ class Shipping(Client):
         Returns:
             ApiResponse:
         """
-        return self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
+        return await self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)

@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -12,7 +11,7 @@ class Services(Client):
     """
 
     @sp_endpoint("/service/v1/serviceJobs/{}", method="GET")
-    def get_service_job_by_service_job_id(self, serviceJobId, **kwargs) -> ApiResponse:
+    async def get_service_job_by_service_job_id(self, serviceJobId, **kwargs) -> ApiResponse:
         """
         get_service_job_by_service_job_id(self, serviceJobId, **kwargs) -> ApiResponse
 
@@ -35,12 +34,12 @@ class Services(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), serviceJobId), params=kwargs
         )
 
     @sp_endpoint("/service/v1/serviceJobs/{}/cancellations", method="PUT")
-    def cancel_service_job_by_service_job_id(
+    async def cancel_service_job_by_service_job_id(
         self, serviceJobId, **kwargs
     ) -> ApiResponse:
         """
@@ -67,12 +66,12 @@ class Services(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), serviceJobId), data=kwargs
         )
 
     @sp_endpoint("/service/v1/serviceJobs/{}/completions", method="PUT")
-    def complete_service_job_by_service_job_id(
+    async def complete_service_job_by_service_job_id(
         self, serviceJobId, **kwargs
     ) -> ApiResponse:
         """
@@ -98,12 +97,12 @@ class Services(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), serviceJobId), data=kwargs
         )
 
     @sp_endpoint("/service/v1/serviceJobs", method="GET")
-    def get_service_jobs(self, **kwargs) -> ApiResponse:
+    async def get_service_jobs(self, **kwargs) -> ApiResponse:
         """
         get_service_jobs(self, **kwargs) -> ApiResponse
 
@@ -138,10 +137,10 @@ class Services(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/service/v1/serviceJobs/{}/appointments", method="POST")
-    def add_appointment_for_service_job_by_service_job_id(
+    async def add_appointment_for_service_job_by_service_job_id(
         self, serviceJobId, **kwargs
     ) -> ApiResponse:
         """
@@ -173,12 +172,12 @@ class Services(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), serviceJobId), data=kwargs
         )
 
     @sp_endpoint("/service/v1/serviceJobs/{}", method="POST")
-    def reschedule_appointment_for_service_job_by_service_job_id(
+    async def reschedule_appointment_for_service_job_by_service_job_id(
         self, serviceJobId, **kwargs
     ) -> ApiResponse:
         """
@@ -212,6 +211,6 @@ class Services(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), serviceJobId), data=kwargs
         )

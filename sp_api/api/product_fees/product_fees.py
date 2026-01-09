@@ -11,7 +11,7 @@ class ProductFees(Client):
     """
 
     @sp_endpoint("/products/fees/v0/listings/{}/feesEstimate", method="POST")
-    def get_product_fees_estimate_for_sku(
+    async def get_product_fees_estimate_for_sku(
         self,
         seller_sku,
         price: float,
@@ -74,12 +74,12 @@ class ProductFees(Client):
                 optional_fulfillment_program,
             )
         )
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), seller_sku), data=kwargs
         )
 
     @sp_endpoint("/products/fees/v0/items/{}/feesEstimate", method="POST")
-    def get_product_fees_estimate_for_asin(
+    async def get_product_fees_estimate_for_asin(
         self,
         asin,
         price: float,
@@ -135,9 +135,9 @@ class ProductFees(Client):
                 optional_fulfillment_program,
             )
         )
-        return self._request(fill_query_params(kwargs.pop("path"), asin), data=kwargs)
+        return await self._request(fill_query_params(kwargs.pop("path"), asin), data=kwargs)
 
-    def get_product_fees_estimate(self, estimate_requests: List[dict]) -> ApiResponse:
+    async def get_product_fees_estimate(self, estimate_requests: List[dict]) -> ApiResponse:
         """
         get_product_fees_estimate(self, estimate_requests: List[dict]) -> ApiResponse
 
@@ -167,7 +167,7 @@ class ProductFees(Client):
                 optional_fulfillment_program:
         """
         data = [dict(**self._create_body(**er)) for er in estimate_requests]
-        return self._request(
+        return await self._request(
             "/products/fees/v0/feesEstimate",
             data=data,
             params=dict(method="POST"),

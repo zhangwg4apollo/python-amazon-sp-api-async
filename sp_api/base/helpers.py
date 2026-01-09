@@ -12,12 +12,21 @@ def fill_query_params(query, *args):
 
 def sp_endpoint(path, method="GET"):
     def decorator(function):
-        @functools.wraps(function)
-        def wrapper(*args, **kwargs):
-            kwargs.update({"path": path, "method": method})
-            return function(*args, **kwargs)
-
-        return wrapper
+        import inspect
+        is_async = inspect.iscoroutinefunction(function)
+        
+        if is_async:
+            @functools.wraps(function)
+            async def async_wrapper(*args, **kwargs):
+                kwargs.update({"path": path, "method": method})
+                return await function(*args, **kwargs)
+            return async_wrapper
+        else:
+            @functools.wraps(function)
+            def sync_wrapper(*args, **kwargs):
+                kwargs.update({"path": path, "method": method})
+                return function(*args, **kwargs)
+            return sync_wrapper
 
     return decorator
 

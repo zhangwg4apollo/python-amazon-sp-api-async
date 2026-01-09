@@ -1,9 +1,8 @@
 import enum
 
-from sp_api.base import Client, Marketplaces, ApiResponse
+from sp_api.base import Client, ApiResponse
 from sp_api.base import sp_endpoint, fill_query_params
 
-import urllib.parse
 
 
 class FulfillmentInboundVersion(str, enum.Enum):
@@ -28,7 +27,7 @@ class FulfillmentInbound(Client):
         super().__init__(*args, **{**kwargs, "version": self.version})
 
     @sp_endpoint("/fba/inbound/<version>/itemsGuidance")
-    def item_guidance(self, **kwargs):
+    async def item_guidance(self, **kwargs):
         """
         item_guidance(self, **kwargs) -> ApiResponse
 
@@ -43,10 +42,10 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/inbound/<version>/plans", method="POST")
-    def plans(self, data, **kwargs):
+    async def plans(self, data, **kwargs):
         """
         plans(self, data, **kwargs) -> ApiResponse
 
@@ -91,10 +90,10 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(kwargs.pop("path"), data={**data, **kwargs})
+        return await self._request(kwargs.pop("path"), data={**data, **kwargs})
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}", method="POST")
-    def create_shipment(self, shipment_id, data, **kwargs):
+    async def create_shipment(self, shipment_id, data, **kwargs):
         """
         create_shipment(self, shipment_id, data, **kwargs)
 
@@ -147,12 +146,12 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), data={**data, **kwargs}
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}", method="PUT")
-    def update_shipment(self, shipment_id, data, **kwargs):
+    async def update_shipment(self, shipment_id, data, **kwargs):
         """
         update_shipment(self, shipment_id, data, **kwargs) -> ApiResponse
 
@@ -193,14 +192,14 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), data={**data, **kwargs}
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/name", method="PUT"
     )
-    def update_shipment_name(self, inboundPlanId, shipmentId, **kwargs):
+    async def update_shipment_name(self, inboundPlanId, shipmentId, **kwargs):
         """
                 update_shipment_name(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse
 
@@ -225,13 +224,13 @@ class FulfillmentInbound(Client):
                 Returns:
                     ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             data=kwargs,
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/preorder")
-    def preorder(self, shipment_id, **kwargs):
+    async def preorder(self, shipment_id, **kwargs):
         """
         preorder(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -247,12 +246,12 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), params=kwargs
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/preorder/confirm", method="PUT")
-    def confirm_preorder(self, shipment_id, **kwargs):
+    async def confirm_preorder(self, shipment_id, **kwargs):
         """
         confirm_preorder(self, shipment_id, **kwargs)
 
@@ -263,12 +262,12 @@ class FulfillmentInbound(Client):
         Returns:
 
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), params=kwargs
         )
 
     @sp_endpoint("/fba/inbound/<version>/prepInstructions")
-    def prep_instruction(self, data, **kwargs):
+    async def prep_instruction(self, data, **kwargs):
         """
         prep_instruction(self, data, **kwargs) -> ApiResponse
 
@@ -284,10 +283,10 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(kwargs.pop("path"), params={**data, **kwargs})
+        return await self._request(kwargs.pop("path"), params={**data, **kwargs})
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/transport")
-    def get_transport_information(self, shipment_id, **kwargs):
+    async def get_transport_information(self, shipment_id, **kwargs):
         """
         get_transport_information(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -303,12 +302,12 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), params=kwargs
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/transport", method="PUT")
-    def update_transport_information(self, shipment_id, **kwargs):
+    async def update_transport_information(self, shipment_id, **kwargs):
         """
         update_transport_information(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -321,12 +320,12 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), data=kwargs
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/transport/void", method="POST")
-    def void_transport(self, shipment_id, **kwargs):
+    async def void_transport(self, shipment_id, **kwargs):
         """
         void_transport(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -342,7 +341,7 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             data=kwargs,
             add_marketplace=False,
@@ -351,7 +350,7 @@ class FulfillmentInbound(Client):
     @sp_endpoint(
         "/fba/inbound/<version>/shipments/{}/transport/estimate", method="POST"
     )
-    def estimate_transport(self, shipment_id, **kwargs):
+    async def estimate_transport(self, shipment_id, **kwargs):
         """
         estimate_transport(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -367,22 +366,22 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             data=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/transport/confirm", method="POST")
-    def confirm_transport(self, shipment_id, **kwargs):
-        return self._request(
+    async def confirm_transport(self, shipment_id, **kwargs):
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             data=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/labels")
-    def get_labels(self, shipment_id, **kwargs):
+    async def get_labels(self, shipment_id, **kwargs):
         """
         get_labels(self, shipment_id, **kwargs)
 
@@ -393,14 +392,14 @@ class FulfillmentInbound(Client):
         Returns:
 
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id),
             params=kwargs,
             add_marketplace=False,
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/billOfLading")
-    def bill_of_lading(self, shipment_id, **kwargs):
+    async def bill_of_lading(self, shipment_id, **kwargs):
         """
         bill_of_lading(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -416,12 +415,12 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), params=kwargs
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipments")
-    def get_shipments(self, **kwargs):
+    async def get_shipments(self, **kwargs):
         """
         get_shipments(self, **kwargs) -> ApiResponse
 
@@ -436,10 +435,10 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/fba/inbound/<version>/shipments/{}/items")
-    def shipment_items_by_shipment(self, shipment_id, **kwargs):
+    async def shipment_items_by_shipment(self, shipment_id, **kwargs):
         """
         shipment_items_by_shipment(self, shipment_id, **kwargs) -> ApiResponse
 
@@ -455,12 +454,12 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), shipment_id), params=kwargs
         )
 
     @sp_endpoint("/fba/inbound/<version>/shipmentItems")
-    def shipment_items(self, **kwargs):
+    async def shipment_items(self, **kwargs):
         """
         shipment_items(self, **kwargs) -> ApiResponse
 
@@ -475,7 +474,7 @@ class FulfillmentInbound(Client):
         Returns:
             ApiResponse
         """
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     def get_shipments_by_id(self, shipment_id_list, **kwargs) -> ApiResponse:
         """
@@ -497,7 +496,7 @@ class FulfillmentInbound(Client):
 
     # 2024-03-20 API
     @sp_endpoint("/inbound/fba/<version>/inboundPlans", method="GET")
-    def list_inbound_plans(self, **kwargs) -> ApiResponse:
+    async def list_inbound_plans(self, **kwargs) -> ApiResponse:
         """
             list_inbound_plans(self, **kwargs) -> ApiResponse
 
@@ -528,10 +527,10 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans", method="POST")
-    def create_inbound_plan(self, **kwargs) -> ApiResponse:
+    async def create_inbound_plan(self, **kwargs) -> ApiResponse:
         """
                 create_inbound_plan(self, **kwargs) -> ApiResponse
 
@@ -573,10 +572,10 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}", method="GET")
-    def get_inbound_plan(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def get_inbound_plan(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 get_inbound_plan(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -599,12 +598,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/boxes", method="GET")
-    def list_inbound_plan_boxes(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def list_inbound_plan_boxes(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 list_inbound_plan_boxes(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -631,12 +630,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/cancellation", method="PUT")
-    def cancel_inbound_plan(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def cancel_inbound_plan(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 cancel_inbound_plan(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -660,12 +659,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/items", method="GET")
-    def list_inbound_plan_items(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def list_inbound_plan_items(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 list_inbound_plan_items(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -692,14 +691,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/packingInformation", method="POST"
     )
-    def set_packing_information(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def set_packing_information(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 set_packing_information(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -736,12 +735,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/packingOptions", method="GET")
-    def list_packing_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def list_packing_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 list_packing_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -768,12 +767,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/packingOptions", method="POST")
-    def generate_packing_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def generate_packing_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 generate_packing_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -796,7 +795,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
@@ -804,7 +803,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/packingOptions/{}/confirmation",
         method="POST",
     )
-    def confirm_packing_option(
+    async def confirm_packing_option(
         self, inboundPlanId, packingOptionId, **kwargs
     ) -> ApiResponse:
         """
@@ -831,13 +830,13 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, packingOptionId),
             data=kwargs,
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/packingGroups/{}/items", method="GET")
-    def list_packing_group_items(self, inboundPlanId, packingGroupId, **kwargs) -> ApiResponse:
+    async def list_packing_group_items(self, inboundPlanId, packingGroupId, **kwargs) -> ApiResponse:
         """
                 list_packing_group_items(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -866,12 +865,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, packingGroupId), params=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/pallets", method="GET")
-    def list_inbound_plan_pallets(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def list_inbound_plan_pallets(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 list_inbound_plan_pallets(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -898,14 +897,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/placementOptions", method="GET"
     )
-    def list_placement_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def list_placement_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 list_placement_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -932,14 +931,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/placementOptions", method="POST"
     )
-    def generate_placement_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def generate_placement_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 generate_placement_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -967,7 +966,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
@@ -975,7 +974,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/placementOptions/{}/confirmation",
         method="POST",
     )
-    def confirm_placement_option(
+    async def confirm_placement_option(
         self, inboundPlanId, placementOptionId, **kwargs
     ) -> ApiResponse:
         """
@@ -1002,13 +1001,13 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, placementOptionId),
             data=kwargs,
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/shipments/{}", method="GET")
-    def get_shipment(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse:
+    async def get_shipment(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse:
         """
                 get_shipment(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse
 
@@ -1033,7 +1032,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             params=kwargs,
         )
@@ -1041,7 +1040,7 @@ class FulfillmentInbound(Client):
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/deliveryChallanDocument", method="GET"
     )
-    def get_delivery_challan_document(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def get_delivery_challan_document(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 get_delivery_challan_document(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1066,12 +1065,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/deliveryWindow", method="POST")
-    def update_shipment_delivery_window(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def update_shipment_delivery_window(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 update_shipment_delivery_window(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1102,14 +1101,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/selfShipAppointmentSlots", method="GET"
     )
-    def get_self_ship_appointment_slots(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def get_self_ship_appointment_slots(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 get_self_ship_appointment_slots(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1138,14 +1137,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/selfShipAppointmentSlots", method="POST"
     )
-    def generate_self_ship_appointment_slots(
+    async def generate_self_ship_appointment_slots(
         self, inboundPlanId, **kwargs
     ) -> ApiResponse:
         """
@@ -1178,12 +1177,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/cancellation", method="PUT")
-    def cancel_self_ship_appointment(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def cancel_self_ship_appointment(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 cancel_self_ship_appointment(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1212,12 +1211,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/schedule", method="POST")
-    def schedule_self_ship_appointment(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def schedule_self_ship_appointment(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 schedule_self_ship_appointment(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1246,12 +1245,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/inboundPlans/{}/trackingDetails", method="PUT")
-    def update_shipment_tracking_details(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def update_shipment_tracking_details(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 update_shipment_tracking_details(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1282,14 +1281,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/transportationOptions", method="GET"
     )
-    def list_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def list_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 list_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1320,14 +1319,14 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), params=kwargs
         )
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/transportationOptions", method="POST"
     )
-    def generate_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def generate_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 generate_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1366,7 +1365,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
@@ -1374,7 +1373,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/transportationOptions/confirmation",
         method="POST",
     )
-    def confirm_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse:
+    async def confirm_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse:
         """
                 confirm_transportation_options(self, inboundPlanId, **kwargs) -> ApiResponse
 
@@ -1406,12 +1405,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId), data=kwargs
         )
 
     @sp_endpoint("/inbound/fba/<version>/items/compliance", method="GET")
-    def list_item_compliance_details(self, **kwargs) -> ApiResponse:
+    async def list_item_compliance_details(self, **kwargs) -> ApiResponse:
         """
                 list_item_compliance_details(self, **kwargs) -> ApiResponse
 
@@ -1436,10 +1435,10 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/inbound/fba/<version>/items/compliance", method="PUT")
-    def update_item_compliance_details(self, **kwargs) -> ApiResponse:
+    async def update_item_compliance_details(self, **kwargs) -> ApiResponse:
         """
                 update_item_compliance_details(self, **kwargs) -> ApiResponse
 
@@ -1468,10 +1467,10 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/inbound/fba/<version>/operations/{}", method="GET")
-    def get_inbound_operation_status(self, operationId, **kwargs) -> ApiResponse:
+    async def get_inbound_operation_status(self, operationId, **kwargs) -> ApiResponse:
         """
                 get_inbound_operation_status(self, operationId, **kwargs) -> ApiResponse
 
@@ -1494,7 +1493,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), operationId), params=kwargs
         )
 
@@ -1502,7 +1501,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/deliveryWindowOptions",
         method="POST",
     )
-    def generate_delivery_window_options(
+    async def generate_delivery_window_options(
         self, inboundPlanId, shipmentId, **kwargs
     ) -> ApiResponse:
         """
@@ -1528,7 +1527,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             params=kwargs,
         )
@@ -1537,7 +1536,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/deliveryWindowOptions",
         method="GET",
     )
-    def list_delivery_window_options(
+    async def list_delivery_window_options(
         self, inboundPlanId, shipmentId, **kwargs
     ) -> ApiResponse:
         """
@@ -1563,7 +1562,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             params=kwargs,
         )
@@ -1572,7 +1571,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/deliveryWindowOptions/{}/confirmation",
         method="POST",
     )
-    def confirm_delivery_window_options(
+    async def confirm_delivery_window_options(
         self, inboundPlanId, shipmentId, deliveryWindowOptionId, **kwargs
     ) -> ApiResponse:
         """
@@ -1599,7 +1598,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(
                 kwargs.pop("path"), inboundPlanId, shipmentId, deliveryWindowOptionId
             ),
@@ -1609,7 +1608,7 @@ class FulfillmentInbound(Client):
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/items", method="GET"
     )
-    def list_shipment_items(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse:
+    async def list_shipment_items(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse:
         """
                 list_shipment_items(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse
 
@@ -1637,13 +1636,13 @@ class FulfillmentInbound(Client):
                 Returns:
                     ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             params=kwargs,
         )
 
     @sp_endpoint("/inbound/fba/<version>/items/labels", method="POST")
-    def create_marketplace_item_labels(self, **kwargs) -> ApiResponse:
+    async def create_marketplace_item_labels(self, **kwargs) -> ApiResponse:
         """
                 create_marketplace_item_labels(self, **kwargs) -> ApiResponse
 
@@ -1670,10 +1669,10 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/inbound/fba/<version>/items/prepDetails", method="GET")
-    def list_prep_details(self, **kwargs) -> ApiResponse:
+    async def list_prep_details(self, **kwargs) -> ApiResponse:
         """
                 list_prep_details(self, **kwargs) -> ApiResponse:
 
@@ -1694,10 +1693,10 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/inbound/fba/<version>/items/prepDetails", method="POST")
-    def set_prep_details(self, **kwargs) -> ApiResponse:
+    async def set_prep_details(self, **kwargs) -> ApiResponse:
         """
                 set_prep_details(self, **kwargs) -> ApiResponse:
 
@@ -1719,12 +1718,12 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint(
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/boxes", method="GET"
     )
-    def list_shipment_boxes(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse:
+    async def list_shipment_boxes(self, inboundPlanId, shipmentId, **kwargs) -> ApiResponse:
         """
                 list_shipment_boxes(self, **kwargs) -> ApiResponse:
 
@@ -1746,7 +1745,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             params=kwargs,
         )
@@ -1755,7 +1754,7 @@ class FulfillmentInbound(Client):
         "/inbound/fba/<version>/inboundPlans/{}/shipments/{}/trackingDetails",
         method="PUT",
     )
-    def update_shipment_tracking_details(
+    async def update_shipment_tracking_details(
         self, inboundPlanId, shipmentId, **kwargs
     ) -> ApiResponse:
         """
@@ -1791,7 +1790,7 @@ class FulfillmentInbound(Client):
                     ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), inboundPlanId, shipmentId),
             data=kwargs,
         )

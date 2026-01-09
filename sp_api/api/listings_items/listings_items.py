@@ -20,7 +20,7 @@ class ListingsItems(Client):
     """
 
     @sp_endpoint("/listings/2021-08-01/items/{}/{}", method="DELETE")
-    def delete_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
+    async def delete_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
         """
         delete_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse
         Delete a listings item for a selling partner.
@@ -40,12 +40,12 @@ class ListingsItems(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerId, sku), data=kwargs
         )
 
     @sp_endpoint("/listings/2021-08-01/items/{}/{}", method="GET")
-    def get_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
+    async def get_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
         """
         get_listings_item(self, sellerId, **kwargs) -> ApiResponse
         Returns details about a listings item for a selling partner.
@@ -77,12 +77,12 @@ class ListingsItems(Client):
                 ]
             )
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerId, sku), params=kwargs
         )
 
     @sp_endpoint("/listings/2021-08-01/items/{}", method="GET")
-    def search_listings_items(self, sellerId, **kwargs) -> ApiResponse:
+    async def search_listings_items(self, sellerId, **kwargs) -> ApiResponse:
         """
         search_listings_items(self, sellerId, **kwargs) -> ApiResponse
         Search for and return list of listings items and respective details for a selling partner.
@@ -113,12 +113,12 @@ class ListingsItems(Client):
                 ]
             )
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerId), params=kwargs
         )
 
     @sp_endpoint("/listings/2021-08-01/items/{}/{}", method="PATCH")
-    def patch_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
+    async def patch_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
         """
         patch_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse
         Partially update (patch) a listings item for a selling partner. Only top-level listings item attributes can be patched. Patching nested attributes is not supported.
@@ -150,14 +150,14 @@ class ListingsItems(Client):
          Returns:
             ApiResponse:
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerId, sku),
             data=kwargs.pop("body"),
             params=kwargs,
         )
 
     @sp_endpoint("/listings/2021-08-01/items/{}/{}", method="PUT")
-    def put_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
+    async def put_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse:
         """
         put_listings_item(self, sellerId, sku, **kwargs) -> ApiResponse
         Creates a new or fully-updates an existing listings item for a selling partner.
@@ -183,7 +183,7 @@ class ListingsItems(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), sellerId, sku),
             data=kwargs.pop("body"),
             params=kwargs,

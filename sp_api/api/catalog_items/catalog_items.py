@@ -25,7 +25,7 @@ class CatalogItems(Client):
         super().__init__(*args, **{**kwargs, "version": self.version})
 
     @sp_endpoint("/catalog/<version>/items", method="GET")
-    def search_catalog_items(self, **kwargs) -> ApiResponse:
+    async def search_catalog_items(self, **kwargs) -> ApiResponse:
         """
         search_catalog_items(self, **kwargs) -> ApiResponse
 
@@ -59,10 +59,10 @@ class CatalogItems(Client):
         includedData = kwargs.get("includedData", [])
         if includedData and isinstance(includedData, list):
             kwargs["includedData"] = ",".join(includedData)
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/catalog/<version>/items/{}", method="GET")
-    def get_catalog_item(self, asin, **kwargs) -> ApiResponse:
+    async def get_catalog_item(self, asin, **kwargs) -> ApiResponse:
         """
         get_catalog_item(self, asin, **kwargs) -> ApiResponse
 
@@ -90,4 +90,4 @@ class CatalogItems(Client):
         includedData = kwargs.get("includedData", [])
         if includedData and isinstance(includedData, list):
             kwargs["includedData"] = ",".join(includedData)
-        return self._request(fill_query_params(kwargs.pop("path"), asin), params=kwargs)
+        return await self._request(fill_query_params(kwargs.pop("path"), asin), params=kwargs)

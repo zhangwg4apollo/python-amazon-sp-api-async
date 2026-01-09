@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -14,7 +13,7 @@ class VendorDirectFulfillmentTransactions(Client):
     @sp_endpoint(
         "/vendor/directFulfillment/transactions/v1/transactions/{}", method="GET"
     )
-    def get_transaction_status(self, transactionId, **kwargs) -> ApiResponse:
+    async def get_transaction_status(self, transactionId, **kwargs) -> ApiResponse:
         """
         get_transaction_status(self, transactionId, **kwargs) -> ApiResponse
 
@@ -37,6 +36,6 @@ class VendorDirectFulfillmentTransactions(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), transactionId), params=kwargs
         )

@@ -17,7 +17,7 @@ class Products(Client):
     """
 
     @sp_endpoint("/products/pricing/v0/price", method="GET")
-    def get_product_pricing_for_skus(
+    async def get_product_pricing_for_skus(
         self, seller_sku_list: [str], item_condition=None, offer_type=None, **kwargs
     ) -> ApiResponse:
         """
@@ -54,7 +54,7 @@ class Products(Client):
         return self._create_get_pricing_request(seller_sku_list, "Sku", **kwargs)
 
     @sp_endpoint("/products/pricing/v0/price", method="GET")
-    def get_product_pricing_for_asins(
+    async def get_product_pricing_for_asins(
         self, asin_list: [str], item_condition=None, offer_type=None, **kwargs
     ) -> ApiResponse:
         """
@@ -89,7 +89,7 @@ class Products(Client):
         return self._create_get_pricing_request(asin_list, "Asin", **kwargs)
 
     @sp_endpoint("/products/pricing/v0/competitivePrice", method="GET")
-    def get_competitive_pricing_for_skus(
+    async def get_competitive_pricing_for_skus(
         self, seller_sku_list: [str], customer_type=None, **kwargs
     ) -> ApiResponse:
         """
@@ -123,7 +123,7 @@ class Products(Client):
         return self._create_get_pricing_request(seller_sku_list, "Sku", **kwargs)
 
     @sp_endpoint("/products/pricing/v0/competitivePrice", method="GET")
-    def get_competitive_pricing_for_asins(
+    async def get_competitive_pricing_for_asins(
         self, asin_list: [str], customer_type=None, **kwargs
     ) -> ApiResponse:
         """
@@ -157,7 +157,7 @@ class Products(Client):
         return self._create_get_pricing_request(asin_list, "Asin", **kwargs)
 
     @sp_endpoint("/products/pricing/v0/listings/{}/offers", method="GET")
-    def get_listings_offer(
+    async def get_listings_offer(
         self, seller_sku: str, item_condition: str, customer_type: str = None, **kwargs
     ) -> ApiResponse:
         """
@@ -188,12 +188,12 @@ class Products(Client):
         if customer_type is not None:
             kwargs["CustomerType"] = customer_type
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), seller_sku), params={**kwargs}
         )
 
     @sp_endpoint("/products/pricing/v0/items/{}/offers", method="GET")
-    def get_item_offers(
+    async def get_item_offers(
         self, asin: str, item_condition: str, customer_type: str = None, **kwargs
     ) -> ApiResponse:
         """
@@ -224,12 +224,12 @@ class Products(Client):
         if customer_type is not None:
             kwargs["CustomerType"] = customer_type
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), asin), params={**kwargs}
         )
 
     @sp_endpoint("/batches/products/pricing/v0/itemOffers", method="POST")
-    def get_item_offers_batch(
+    async def get_item_offers_batch(
         self,
         requests_: Optional[Union[List[Dict], GetItemOffersBatchRequest]] = None,
         **kwargs,
@@ -259,7 +259,7 @@ class Products(Client):
         else:
             get_item_offers_batch_request = {"requests": requests_}
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"),
             data=get_item_offers_batch_request,
             params={**kwargs},
@@ -267,7 +267,7 @@ class Products(Client):
         )
 
     @sp_endpoint("/batches/products/pricing/v0/listingOffers", method="POST")
-    def get_listing_offers_batch(
+    async def get_listing_offers_batch(
         self,
         requests_: Optional[Union[List[Dict], GetListingOffersBatchRequest]] = None,
         **kwargs,
@@ -297,7 +297,7 @@ class Products(Client):
         else:
             get_listing_offers_batch_request = {"requests": requests_}
 
-        return self._request(
+        return await self._request(
             kwargs.pop("path"),
             data=get_listing_offers_batch_request,
             params={**kwargs},
@@ -305,7 +305,7 @@ class Products(Client):
         )
 
     @sp_endpoint('/batches/products/pricing/2022-05-01/offer/featuredOfferExpectedPrice', method='POST')
-    def get_featured_offer_expected_price_batch(self, requests_: Optional[
+    async def get_featured_offer_expected_price_batch(self, requests_: Optional[
         Union[List[Dict], GetFeaturedOfferExpectedPriceBatch]], **kwargs) -> ApiResponse:
         """
         get_featured_offer_expected_price_batch(self, **kwargs) -> ApiResponse
@@ -336,7 +336,7 @@ class Products(Client):
         else:
             get_featured_offer_expected_price_batch_request = {"requests": requests_}
 
-        return self._request(
+        return await self._request(
             kwargs.pop('path'),
             data=get_featured_offer_expected_price_batch_request,
             params={**kwargs},
@@ -344,7 +344,7 @@ class Products(Client):
         )
 
     @sp_endpoint('/batches/products/pricing/2022-05-01/items/competitiveSummary', method='POST')
-    def get_competitive_summary_batch(self, requests_: Optional[Union[List[Dict], GetCompetitiveSummaryBatch]], **kwargs) -> ApiResponse:
+    async def get_competitive_summary_batch(self, requests_: Optional[Union[List[Dict], GetCompetitiveSummaryBatch]], **kwargs) -> ApiResponse:
         """
         get_competitive_summary(self, **kwargs) -> ApiResponse
 
@@ -369,15 +369,15 @@ class Products(Client):
         else:
             get_competitive_summary_batch_request = {"requests": requests_}
 
-        return self._request(
+        return await self._request(
             kwargs.pop('path'),
             data=get_competitive_summary_batch_request,
             params={**kwargs},
             add_marketplace=False
         )
 
-    def _create_get_pricing_request(self, item_list, item_type, **kwargs):
-        return self._request(
+    async def _create_get_pricing_request(self, item_list, item_type, **kwargs):
+        return await self._request(
             kwargs.pop("path"),
             params={
                 **{f"{item_type}s": ",".join(item_list)},

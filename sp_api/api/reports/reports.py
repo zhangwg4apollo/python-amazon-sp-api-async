@@ -4,8 +4,6 @@ from datetime import datetime
 from io import BytesIO, StringIO
 from typing import Optional, Union
 
-import requests
-
 from sp_api.base import (
     Client,
     sp_endpoint,
@@ -24,7 +22,7 @@ class Reports(Client):
     """
 
     @sp_endpoint("/reports/2021-06-30/reports", method="GET")
-    def get_reports(self, **kwargs) -> ApiResponse:
+    async def get_reports(self, **kwargs) -> ApiResponse:
         """
         get_reports(self, **kwargs) -> ApiResponse
 
@@ -94,11 +92,11 @@ class Reports(Client):
             if kwargs.get(k, None) and isinstance(kwargs.get(k), datetime):
                 kwargs.update({k: kwargs.get(k).isoformat()})
         if not kwargs.get("nextToken"):
-            return self._request(kwargs.pop("path"), params=kwargs)
-        return self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
+            return await self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs, add_marketplace=False)
 
     @sp_endpoint("/reports/2021-06-30/reports", method="POST")
-    def create_report(self, **kwargs) -> ApiResponse:
+    async def create_report(self, **kwargs) -> ApiResponse:
         """
         create_report(self, **kwargs) -> ApiResponse
 
@@ -138,10 +136,10 @@ class Reports(Client):
             kwargs.update({"dataStartTime": kwargs.get("dataStartTime").isoformat()})
         if isinstance(kwargs.get("dataEndTime", None), datetime):
             kwargs.update({"dataEndTime": kwargs.get("dataEndTime").isoformat()})
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/reports/2021-06-30/reports/{}", method="DELETE")
-    def cancel_report(self, reportId, **kwargs) -> ApiResponse:
+    async def cancel_report(self, reportId, **kwargs) -> ApiResponse:
         """
         cancel_report(self, reportId, **kwargs) -> ApiResponse
 
@@ -164,12 +162,12 @@ class Reports(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), reportId), data=kwargs
         )
 
     @sp_endpoint("/reports/2021-06-30/reports/{}", method="GET")
-    def get_report(self, reportId, **kwargs) -> ApiResponse:
+    async def get_report(self, reportId, **kwargs) -> ApiResponse:
         """
         get_report(self, report_id, **kwargs)
         Returns report details (including the reportDocumentId, if available) for the report that you specify.
@@ -198,12 +196,12 @@ class Reports(Client):
 
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), reportId), params=kwargs
         )
 
     @sp_endpoint("/reports/2021-06-30/schedules", method="GET")
-    def get_report_schedules(self, **kwargs) -> ApiResponse:
+    async def get_report_schedules(self, **kwargs) -> ApiResponse:
         """
         Returns report schedule details that match the filters that you specify.
 
@@ -230,10 +228,10 @@ class Reports(Client):
         ):
             kwargs.update({"reportTypes": ",".join(kwargs.get("reportTypes"))})
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/reports/2021-06-30/schedules", method="POST")
-    def create_report_schedule(self, **kwargs) -> ApiResponse:
+    async def create_report_schedule(self, **kwargs) -> ApiResponse:
         """
         create_report_schedule(self, **kwargs) -> ApiResponse
 
@@ -266,10 +264,10 @@ class Reports(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), data=kwargs)
+        return await self._request(kwargs.pop("path"), data=kwargs)
 
     @sp_endpoint("/reports/2021-06-30/schedules/{}", method="DELETE")
-    def cancel_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse:
+    async def cancel_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse:
         """
         cancel_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse
 
@@ -297,11 +295,11 @@ class Reports(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), reportScheduleId), data=kwargs
         )
 
-    def delete_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse:
+    async def delete_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse:
         """
         cancel_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse
 
@@ -320,7 +318,7 @@ class Reports(Client):
         Examples:
             literal blocks::
 
-                Reports().cancel_report_schedule('ID')
+                await Reports().cancel_report_schedule('ID')
 
         Args:
             reportScheduleId: str
@@ -329,10 +327,10 @@ class Reports(Client):
         Returns:
             ApiResponse
         """
-        return self.cancel_report_schedule(reportScheduleId)
+        return await self.cancel_report_schedule(reportScheduleId, **kwargs)
 
     @sp_endpoint("/reports/2021-06-30/schedules/{}", method="GET")
-    def get_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse:
+    async def get_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse:
         """
         get_report_schedule(self, reportScheduleId, **kwargs) -> ApiResponse
 
@@ -360,12 +358,12 @@ class Reports(Client):
         Returns:
             ApiResponse
         """
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), reportScheduleId), params=kwargs
         )
 
     @sp_endpoint("/reports/2021-06-30/documents/{}", method="GET")
-    def get_report_document(
+    async def get_report_document(
         self,
         reportDocumentId,
         download: bool = False,
@@ -398,7 +396,7 @@ class Reports(Client):
         Examples:
             literal blocks::
 
-                Reports().get_report_document('0356cf79-b8b0-4226-b4b9-0ee058ea5760', download=True, file=file)
+                await Reports().get_report_document('0356cf79-b8b0-4226-b4b9-0ee058ea5760', download=True, file=file)
 
         Args:
             reportDocumentId: str | the document to load
@@ -415,24 +413,24 @@ class Reports(Client):
         Returns:
              ApiResponse
         """  # noqa: E501
-        res = self._request(
+        res = await self._request(
             fill_query_params(kwargs.pop("path"), reportDocumentId),
             add_marketplace=False,
         )
         if download or file or ("decrypt" in kwargs and kwargs["decrypt"]):
-            document_response = requests.get(
+            httpx_timeout = timeout if timeout is not None else 30.0
+            document_response = await self._client.get(
                 res.payload.get("url"),
-                proxies=self.proxies,
-                verify=self.verify,
-                timeout=timeout,
+                timeout=httpx_timeout,
             )
             document = document_response.content
             if not character_code:
-                character_code = (
-                    document_response.encoding
-                    if document_response and document_response.encoding
-                    else "iso-8859-1"
-                )
+                # httpx doesn't have encoding attribute, try to get from headers
+                content_type = document_response.headers.get("content-type", "")
+                if "charset=" in content_type:
+                    character_code = content_type.split("charset=")[1].split(";")[0].strip()
+                else:
+                    character_code = "iso-8859-1"
                 if character_code.lower() == "windows-31j":
                     character_code = "cp932"
             if "compressionAlgorithm" in res.payload:
@@ -445,7 +443,7 @@ class Reports(Client):
             if character_code:
                 try:
                     decoded_document = document.decode(character_code)
-                except Exception as e:
+                except Exception:
                     decoded_document = document
 
             if download:

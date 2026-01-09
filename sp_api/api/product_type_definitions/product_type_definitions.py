@@ -1,4 +1,3 @@
-import urllib.parse
 
 from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
 
@@ -12,7 +11,7 @@ class ProductTypeDefinitions(Client):
     """
 
     @sp_endpoint("/definitions/2020-09-01/productTypes", method="GET")
-    def search_definitions_product_types(self, **kwargs) -> ApiResponse:
+    async def search_definitions_product_types(self, **kwargs) -> ApiResponse:
         """
         search_definitions_product_types(self, **kwargs) -> ApiResponse
 
@@ -36,10 +35,10 @@ class ProductTypeDefinitions(Client):
             ApiResponse:
         """
 
-        return self._request(kwargs.pop("path"), params=kwargs)
+        return await self._request(kwargs.pop("path"), params=kwargs)
 
     @sp_endpoint("/definitions/2020-09-01/productTypes/{}", method="GET")
-    def get_definitions_product_type(self, productType, **kwargs) -> ApiResponse:
+    async def get_definitions_product_type(self, productType, **kwargs) -> ApiResponse:
         """
         get_definitions_product_type(self, productType, **kwargs) -> ApiResponse
 
@@ -69,6 +68,6 @@ class ProductTypeDefinitions(Client):
             ApiResponse:
         """
 
-        return self._request(
+        return await self._request(
             fill_query_params(kwargs.pop("path"), productType), params=kwargs
         )

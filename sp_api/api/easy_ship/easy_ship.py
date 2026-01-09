@@ -1,6 +1,5 @@
-import urllib.parse
 
-from sp_api.base import Client, sp_endpoint, fill_query_params, ApiResponse
+from sp_api.base import Client, sp_endpoint, ApiResponse
 
 
 class EasyShip(Client):
@@ -13,7 +12,7 @@ class EasyShip(Client):
 
 
     @sp_endpoint('/easyShip/2022-03-23/timeSlot', method='POST')
-    def list_handover_slots(self, **kwargs) -> ApiResponse:
+    async def list_handover_slots(self, **kwargs) -> ApiResponse:
         """
         list_handover_slots(self, **kwargs) -> ApiResponse
 
@@ -43,11 +42,11 @@ The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits 
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), data=kwargs)
+        return await self._request(kwargs.pop('path'), data=kwargs)
     
 
     @sp_endpoint('/easyShip/2022-03-23/package', method='GET')
-    def get_scheduled_package(self, **kwargs) -> ApiResponse:
+    async def get_scheduled_package(self, **kwargs) -> ApiResponse:
         """
         get_scheduled_package(self, **kwargs) -> ApiResponse
 
@@ -72,11 +71,11 @@ The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits 
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), params=kwargs)
+        return await self._request(kwargs.pop('path'), params=kwargs)
     
 
     @sp_endpoint('/easyShip/2022-03-23/package', method='POST')
-    def create_scheduled_package(self, **kwargs) -> ApiResponse:
+    async def create_scheduled_package(self, **kwargs) -> ApiResponse:
         """
         create_scheduled_package(self, **kwargs) -> ApiResponse
 
@@ -114,11 +113,11 @@ The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits 
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), data=kwargs)
+        return await self._request(kwargs.pop('path'), data=kwargs)
     
 
     @sp_endpoint('/easyShip/2022-03-23/package', method='PATCH')
-    def update_scheduled_packages(self, **kwargs) -> ApiResponse:
+    async def update_scheduled_packages(self, **kwargs) -> ApiResponse:
         """
         update_scheduled_packages(self, **kwargs) -> ApiResponse
 
@@ -146,11 +145,11 @@ The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits 
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), data=kwargs)
+        return await self._request(kwargs.pop('path'), data=kwargs)
     
 
     @sp_endpoint('/easyShip/2022-03-23/packages/bulk', method='POST')
-    def create_scheduled_package_bulk(self, **kwargs) -> ApiResponse:
+    async def create_scheduled_package_bulk(self, **kwargs) -> ApiResponse:
         """
         create_scheduled_package_bulk(self, **kwargs) -> ApiResponse
 
@@ -186,5 +185,5 @@ The `x-amzn-RateLimit-Limit` response header returns the usage plan rate limits 
             ApiResponse:
         """
     
-        return self._request(kwargs.pop('path'), data=kwargs)
+        return await self._request(kwargs.pop('path'), data=kwargs)
     
