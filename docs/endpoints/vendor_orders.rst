@@ -2,4 +2,4 @@ VendorOrders
 ============
 
     
-..  autoclass:: sp_api.api.VendorOrders
+..  autoclass:: sp_api_async.api.VendorOrders

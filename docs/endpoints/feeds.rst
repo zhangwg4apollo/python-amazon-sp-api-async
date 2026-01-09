@@ -5,6 +5,6 @@ Feeds
 
 
 
-..  autoclass:: sp_api.api.Feeds
+..  autoclass:: sp_api_async.api.Feeds
 
 

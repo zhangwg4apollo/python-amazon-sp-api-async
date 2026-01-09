@@ -1,6 +1,6 @@
 import pytest
-from sp_api.api.external_fulfillment.external_fulfillment import ExternalFulfillment
-from sp_api.base import SellingApiBadRequestException
+from sp_api_async.api.external_fulfillment.external_fulfillment import ExternalFulfillment
+from sp_api_async.base import SellingApiBadRequestException
 
 
 @pytest.mark.asyncio

@@ -89,7 +89,7 @@ References
 
 .. target-notes::
 
-.. _`credentials.yml`: https://github.com/saleweaver/python-amazon-sp-api/blob/master/credentials.yml
+.. _`credentials.yml`: https://github.com/zhangwg4apollo/python-amazon-sp-api-async/blob/master/credentials.yml
 .. _`confused`: https://confuse.readthedocs.io/en/latest/usage.html#search-paths
 
 

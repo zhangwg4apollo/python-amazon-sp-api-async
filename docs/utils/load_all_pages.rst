@@ -1,7 +1,7 @@
 Load All Pages Decorator
 ========================
 
-..  automethod:: sp_api.util.load_all_pages
+..  automethod:: sp_api_async.util.load_all_pages
 
 The example below will load all pages, transforming the decorated function to an async generator.
 The async generator yields a page at a time.
@@ -12,9 +12,9 @@ Some examples:
 
     import asyncio
     from datetime import datetime, timedelta
-    from sp_api.base import Marketplaces
-    from sp_api.api import Orders
-    from sp_api.util import throttle_retry, load_all_pages
+    from sp_api_async.base import Marketplaces
+    from sp_api_async.api import Orders
+    from sp_api_async.util import throttle_retry, load_all_pages
 
 
     @throttle_retry()
@@ -38,8 +38,8 @@ Some examples:
 .. code-block:: python
 
     import asyncio
-    from sp_api.api import Finances
-    from sp_api.util import throttle_retry, load_all_pages
+    from sp_api_async.api import Finances
+    from sp_api_async.util import throttle_retry, load_all_pages
 
     @throttle_retry()
     @load_all_pages()

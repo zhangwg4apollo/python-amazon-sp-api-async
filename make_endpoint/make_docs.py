@@ -20,7 +20,7 @@ def get_endpoint_file_template(s):
 {'=' * len(class_name)}
     
     
-..  autoclass:: sp_api.api.{class_name}"""
+..  autoclass:: sp_api_async.api.{class_name}"""
 
 
 def append_to_links(link):

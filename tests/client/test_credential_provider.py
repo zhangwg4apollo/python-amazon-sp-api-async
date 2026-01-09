@@ -2,7 +2,7 @@ import os
 import pytest
 from unittest import mock
 
-from sp_api.base.credential_provider import FromCachedSecretsCredentialProvider
+from sp_api_async.base.credential_provider import FromCachedSecretsCredentialProvider
 
 
 REFRESH_TOKEN = '<refresh_token>'

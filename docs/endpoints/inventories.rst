@@ -3,4 +3,4 @@ Inventories
 
 
 
-..  autoclass:: sp_api.api.Inventories
+..  autoclass:: sp_api_async.api.Inventories

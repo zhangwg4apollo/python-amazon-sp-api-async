@@ -3,4 +3,4 @@ Shipping
 
 
     
-..  autoclass:: sp_api.api.Shipping
+..  autoclass:: sp_api_async.api.Shipping

@@ -1,8 +1,8 @@
 import pytest
 
-from sp_api.api.products.products import Products
-from sp_api.api.products.products_definitions import GetListingOffersBatchRequest, ListingOffersRequest
-from sp_api.base import ApiResponse, SellingApiBadRequestException
+from sp_api_async.api.products.products import Products
+from sp_api_async.api.products.products_definitions import GetListingOffersBatchRequest, ListingOffersRequest
+from sp_api_async.base import ApiResponse, SellingApiBadRequestException
 
 
 @pytest.mark.asyncio

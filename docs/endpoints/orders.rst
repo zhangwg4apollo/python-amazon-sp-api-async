@@ -3,7 +3,7 @@ Orders
 
 
 
-..  autoclass:: sp_api.api.Orders
+..  autoclass:: sp_api_async.api.Orders
 
 
 

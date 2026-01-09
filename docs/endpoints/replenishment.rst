@@ -2,4 +2,4 @@ Replenishment
 =============
 
     
-..  autoclass:: sp_api.api.Replenishment
+..  autoclass:: sp_api_async.api.Replenishment

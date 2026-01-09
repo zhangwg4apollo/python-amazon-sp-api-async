@@ -3,4 +3,4 @@ Sellers
 
 
 
-..  autoclass:: sp_api.api.Sellers
+..  autoclass:: sp_api_async.api.Sellers

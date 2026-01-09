@@ -1,6 +1,6 @@
 import pytest
 
-from sp_api.api import FulfillmentInbound
+from sp_api_async.api import FulfillmentInbound
 
 
 @pytest.mark.asyncio

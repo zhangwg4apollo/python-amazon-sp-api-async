@@ -3,4 +3,4 @@ Product Fees
 
 
 
-..  autoclass:: sp_api.api.ProductFees
+..  autoclass:: sp_api_async.api.ProductFees

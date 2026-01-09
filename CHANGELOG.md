@@ -168,7 +168,7 @@ graph TD;
 #### Module Import Path
 ```mermaid
 graph TD;
-    A[Client] --> B[sp_api.api.external_fulfillment.external_fulfillment];
+    A[Client] --> B[sp_api_async.api.external_fulfillment.external_fulfillment];
 
 
 ## v1.9.51 - 2025-12-05
@@ -186,7 +186,7 @@ graph TD;
 #### Module Import Path
 ```mermaid
 graph TD;
-    A[Client] --> B[sp_api.api.external_fulfillment.external_fulfillment];
+    A[Client] --> B[sp_api_async.api.external_fulfillment.external_fulfillment];
 ```
 
 #### Documentation Structure
@@ -208,7 +208,7 @@ graph TD;
 
   ```mermaid
   graph TD;
-      A[Client] --> B[sp_api.api.external_fulfillment.external_fulfillment];
+      A[Client] --> B[sp_api_async.api.external_fulfillment.external_fulfillment];
   ```
 
 ### Internal
@@ -229,7 +229,7 @@ graph TD;
 - **Dependencies**: Updated the `boto3` dependency from `1.40.21` to `1.40.40` to ensure compatibility and leverage the latest features and fixes.
 
 ### Internal
-- Added `sp_api.api.external_fulfillment` to the list of packages in `setup.py`.
+- Added `sp_api_async.api.external_fulfillment` to the list of packages in `setup.py`.
 - Updated version number from 1.9.48 to 1.9.49.
 
 ## v1.9.48 - 2025-09-03
@@ -794,7 +794,7 @@ graph TD;
 ### New Features
 
 - **Easy Ship API Integration**
-  - Introduced a new `EasyShip` client in the `sp_api.api` module, allowing users to manage and ship Amazon Easy Ship orders.
+  - Introduced a new `EasyShip` client in the `sp_api_async.api` module, allowing users to manage and ship Amazon Easy Ship orders.
   - Added several new endpoints under the `EasyShip` client:
     - `list_handover_slots`: Retrieve available time slots for scheduling Easy Ship orders.
     - `get_scheduled_package`: Get detailed information about a scheduled package.

@@ -1,6 +1,6 @@
 import pytest
-from sp_api.api import CatalogItems as Catalog, CatalogItemsVersion
-from sp_api.base import ApiResponse
+from sp_api_async.api import CatalogItems as Catalog, CatalogItemsVersion
+from sp_api_async.base import ApiResponse
 
 
 @pytest.mark.asyncio

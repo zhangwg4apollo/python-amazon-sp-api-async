@@ -1,5 +1,5 @@
 import pytest
-from sp_api.api import Orders
+from sp_api_async.api import Orders
 
 
 @pytest.mark.asyncio
@@ -52,7 +52,7 @@ async def test_get_order_items_buyer_info():
 
 @pytest.mark.asyncio
 async def test_get_orders_400_error():
-    from sp_api.base import SellingApiBadRequestException
+    from sp_api_async.base import SellingApiBadRequestException
     async with Orders() as client:
         try:
             await client.get_orders(CreatedAfter='TEST_CASE_400')
@@ -136,7 +136,7 @@ async def test_confirm_shipment():
 
 @pytest.mark.asyncio
 async def test_update_shipment_status_400_error():
-    from sp_api.base import SellingApiBadRequestException
+    from sp_api_async.base import SellingApiBadRequestException
     async with Orders() as client:
         try:
             await client.update_shipment_status(

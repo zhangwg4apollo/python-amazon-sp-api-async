@@ -1,5 +1,5 @@
 import pytest
-from sp_api.api import ProductTypeDefinitions
+from sp_api_async.api import ProductTypeDefinitions
 
 
 @pytest.mark.asyncio

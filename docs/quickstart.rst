@@ -20,14 +20,14 @@ Install the package:
 
 .. code-block:: bash
 
-   pip install python-amazon-sp-api
+   pip install python-amazon-sp-api-async
 
 If you want to use AWS Secrets Manager for credential storage:
 
 .. code-block:: bash
 
-   pip install "python-amazon-sp-api[aws]"
-   pip install "python-amazon-sp-api[aws-caching]"
+   pip install "python-amazon-sp-api-async[aws]"
+   pip install "python-amazon-sp-api-async[aws-caching]"
 
 Credentials
 -----------
@@ -53,7 +53,7 @@ Example – credentials from code:
        role_arn='your_role_arn',
    )
 
-   from sp_api.api import Orders
+   from sp_api_async.api import Orders
    # Use async context manager
    async with Orders(credentials=credentials) as orders:
        ...
@@ -65,7 +65,7 @@ By default, the library uses the US marketplace.
 
 You can change this:
 
-* Per client, by passing a :class:`sp_api.base.Marketplaces` value
+* Per client, by passing a :class:`sp_api_async.base.Marketplaces` value
 * Globally, via the ``SP_API_DEFAULT_MARKETPLACE`` environment variable
 
 .. code-block:: bash
@@ -74,8 +74,8 @@ You can change this:
 
 .. code-block:: python
 
-   from sp_api.base import Marketplaces
-   from sp_api.api import Orders
+   from sp_api_async.base import Marketplaces
+   from sp_api_async.api import Orders
 
    # Explicit marketplace
    async with Orders(marketplace=Marketplaces.DE) as orders:
@@ -103,8 +103,8 @@ First request: get a single order
 
 .. code-block:: python
 
-   from sp_api.base import Marketplaces
-   from sp_api.api import Orders
+   from sp_api_async.base import Marketplaces
+   from sp_api_async.api import Orders
 
    async with Orders(marketplace=Marketplaces.DE) as client:
        order = await client.get_order('YOUR-ORDER-ID')
@@ -123,8 +123,8 @@ that turns endpoint calls into an **async generator** that automatically follows
 
    from datetime import datetime, timedelta
 
-   from sp_api.api import Orders
-   from sp_api.util import throttle_retry, load_all_pages
+   from sp_api_async.api import Orders
+   from sp_api_async.util import throttle_retry, load_all_pages
 
    @throttle_retry()      # retry on throttling
    @load_all_pages()      # follow NextToken automatically
@@ -156,20 +156,20 @@ Handling throttling & retries
 
 Amazon enforces strict rate limits per operation. When you hit the limit, SP-API
 returns HTTP 429 and this library raises
-:class:`sp_api.base.SellingApiRequestThrottledException`.
+:class:`sp_api_async.base.SellingApiRequestThrottledException`.
 
-The :mod:`sp_api.util` module provides retry decorators:
+The :mod:`sp_api_async.util` module provides retry decorators:
 
-* :func:`sp_api.util.retry`
-* :func:`sp_api.util.sp_retry`
-* :func:`sp_api.util.throttle_retry`
+* :func:`sp_api_async.util.retry`
+* :func:`sp_api_async.util.sp_retry`
+* :func:`sp_api_async.util.throttle_retry`
 
 Example: retry a single call:
 
 .. code-block:: python
 
-   from sp_api.api import Orders
-   from sp_api.util import throttle_retry
+   from sp_api_async.api import Orders
+   from sp_api_async.util import throttle_retry
 
    @throttle_retry(tries=10, delay=5, rate=1.3)
    async def get_orders(**kwargs):
@@ -182,8 +182,8 @@ Combining retries and auto-pagination:
 
 .. code-block:: python
 
-   from sp_api.api import Orders
-   from sp_api.util import sp_retry, load_all_pages
+   from sp_api_async.api import Orders
+   from sp_api_async.util import sp_retry, load_all_pages
 
    @sp_retry(tries=10, delay=10, rate=1.2)
    @load_all_pages()
@@ -198,14 +198,14 @@ Combining retries and auto-pagination:
 Creating reports
 ----------------
 
-Creating a report with :class:`sp_api.api.ReportsV2`:
+Creating a report with :class:`sp_api_async.api.ReportsV2`:
 
 .. code-block:: python
 
    from datetime import datetime, timedelta
 
-   from sp_api.api import ReportsV2
-   from sp_api.base.reportTypes import ReportType
+   from sp_api_async.api import ReportsV2
+   from sp_api_async.base.reportTypes import ReportType
 
    async with ReportsV2() as reports:
        res = await reports.create_report(
@@ -221,7 +221,7 @@ Submitting feeds
 
 .. code-block:: python
 
-   from sp_api.api import Feeds
+   from sp_api_async.api import Feeds
 
    async with Feeds() as feeds_client:
        with open("my_feed_file.tsv", "rb") as f:
@@ -246,7 +246,7 @@ For those, you must:
 
 .. code-block:: python
 
-   from sp_api.api import Orders
+   from sp_api_async.api import Orders
 
    rdt = "YOUR_RESTRICTED_DATA_TOKEN"
 
@@ -261,7 +261,7 @@ Next steps
 
 From here, you probably want to look at:
 
-* :doc:`responses` – details on :class:`sp_api.base.ApiResponse`
+* :doc:`responses` – details on :class:`sp_api_async.base.ApiResponse`
 * :doc:`endpoints` – per-endpoint documentation
 * :doc:`utils` – retry / pagination / key maker helpers
 * :doc:`examples` – more complete examples and flows

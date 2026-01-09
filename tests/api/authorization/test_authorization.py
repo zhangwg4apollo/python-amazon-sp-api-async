@@ -1,5 +1,5 @@
 import pytest
-from sp_api.api import Authorization
+from sp_api_async.api import Authorization
 
 
 @pytest.mark.asyncio

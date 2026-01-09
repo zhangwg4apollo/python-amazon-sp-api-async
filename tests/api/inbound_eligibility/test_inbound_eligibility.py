@@ -1,5 +1,5 @@
 import pytest
-from sp_api.api import FbaInboundEligibility
+from sp_api_async.api import FbaInboundEligibility
 
 
 @pytest.mark.asyncio

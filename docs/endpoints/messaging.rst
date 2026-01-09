@@ -2,4 +2,4 @@ Messaging
 =========
 
 
-..  autoclass:: sp_api.api.Messaging
+..  autoclass:: sp_api_async.api.Messaging

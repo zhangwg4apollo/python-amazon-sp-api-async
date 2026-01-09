@@ -2,4 +2,4 @@ VendorDirectFulfillmentInventory
 ================================
     
 
-..  autoclass:: sp_api.api.VendorDirectFulfillmentInventory
+..  autoclass:: sp_api_async.api.VendorDirectFulfillmentInventory

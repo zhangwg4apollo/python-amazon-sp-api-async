@@ -3,4 +3,4 @@ Notifications
 
 
     
-..  autoclass:: sp_api.api.Notifications
+..  autoclass:: sp_api_async.api.Notifications

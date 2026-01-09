@@ -2,4 +2,4 @@ MerchantFulfillment
 ===================
 
     
-..  autoclass:: sp_api.api.MerchantFulfillment
+..  autoclass:: sp_api_async.api.MerchantFulfillment

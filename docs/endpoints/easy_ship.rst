@@ -2,4 +2,4 @@ EasyShip
 ========
     
     
-..  autoclass:: sp_api.api.EasyShip
+..  autoclass:: sp_api_async.api.EasyShip

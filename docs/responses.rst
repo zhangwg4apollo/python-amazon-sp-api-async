@@ -1,11 +1,11 @@
 Responses
 =========
 
-All endpoints return `sp_api.base.ApiResponse` with the following signature. `payload` contains Amazon's response.
+All endpoints return `sp_api_async.base.ApiResponse` with the following signature. `payload` contains Amazon's response.
 
 .. code-block:: python
 
-    from sp_api.api import Orders
+    from sp_api_async.api import Orders
 
     async with Orders() as client:
         response = await client.get_orders(CreatedAfter='TEST_CASE_200', MarketplaceIds=["ATVPDKIKX0DER"])
@@ -20,6 +20,6 @@ All endpoints return `sp_api.base.ApiResponse` with the following signature. `pa
 
 -----------------------------------------
 
-..  autoclass:: sp_api.base.ApiResponse
+..  autoclass:: sp_api_async.base.ApiResponse
 
 

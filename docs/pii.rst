@@ -7,7 +7,7 @@ If your application has access to PII-Data, you can request a token with the `To
 
 .. code-block:: python
 
-    from sp_api.api import Tokens, Orders
+    from sp_api_async.api import Tokens, Orders
     from datetime import datetime, timedelta
 
     async with Tokens() as tokens_client:

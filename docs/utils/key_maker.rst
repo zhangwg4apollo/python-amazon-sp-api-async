@@ -1,4 +1,4 @@
 Key Maker
 =========
 
-..  autoclass:: sp_api.util.KeyMaker
+..  autoclass:: sp_api_async.util.KeyMaker

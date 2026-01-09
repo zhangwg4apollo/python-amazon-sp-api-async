@@ -1,6 +1,6 @@
 import pytest
-from sp_api.api import ProductFees
-from sp_api.base import Marketplaces
+from sp_api_async.api import ProductFees
+from sp_api_async.base import Marketplaces
 
 
 @pytest.mark.asyncio

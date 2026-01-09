@@ -3,4 +3,4 @@ Services
 
 
     
-..  autoclass:: sp_api.api.Services
+..  autoclass:: sp_api_async.api.Services

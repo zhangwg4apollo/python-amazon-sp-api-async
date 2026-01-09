@@ -9,43 +9,43 @@ High-level components
 
 The project is organised roughly as:
 
-* ``sp_api.base`` – core building blocks (client, response wrapper, marketplaces, exceptions, credentials)
-* ``sp_api.api`` – one client class per SP-API group (Orders, Reports, Feeds, DataKiosk, ...)
-* ``sp_api.util`` – utilities for retries, throttling and pagination
+* ``sp_api_async.base`` – core building blocks (client, response wrapper, marketplaces, exceptions, credentials)
+* ``sp_api_async.api`` – one client class per SP-API group (Orders, Reports, Feeds, DataKiosk, ...)
+* ``sp_api_async.util`` – utilities for retries, throttling and pagination
 * ``docs`` – Sphinx documentation
 
-Most users only touch the classes in ``sp_api.api``, but everything ultimately
-flows through :class:`sp_api.base.Client`.
+Most users only touch the classes in ``sp_api_async.api``, but everything ultimately
+flows through :class:`sp_api_async.base.Client`.
 
 Client lifecycle
 ----------------
 
-All endpoint clients inherit from :class:`sp_api.base.client.Client`, which
-itself extends :class:`sp_api.base.base_client.BaseClient`.
+All endpoint clients inherit from :class:`sp_api_async.base.client.Client`, which
+itself extends :class:`sp_api_async.base.base_client.BaseClient`.
 
 When you do:
 
 .. code-block:: python
 
-   from sp_api.api import Orders
+   from sp_api_async.api import Orders
 
    async with Orders() as client:
        ...
 
 the following happens internally:
 
-1. Credentials are resolved via :class:`sp_api.base.credential_provider.CredentialProvider`
+1. Credentials are resolved via :class:`sp_api_async.base.credential_provider.CredentialProvider`
    (code → env vars → config file).
 2. The marketplace is chosen, either from the ``marketplace`` argument or from
    the ``SP_API_DEFAULT_MARKETPLACE`` environment variable.
-3. An :class:`sp_api.auth.AccessTokenClient` is created for the account.
+3. An :class:`sp_api_async.auth.AccessTokenClient` is created for the account.
 4. The client prepares the base endpoint URL, marketplace id and region.
 5. The **request method**, path, params and body are passed to ``Client._request``.
 
 Request flow
 ------------
 
-All concrete endpoint methods eventually call :meth:`sp_api.base.client.Client._request`.
+All concrete endpoint methods eventually call :meth:`sp_api_async.base.client.Client._request`.
 
 Key steps:
 
@@ -66,16 +66,16 @@ Response handling
 -----------------
 
 Responses are normal ``httpx`` responses but wrapped into
-:class:`sp_api.base.ApiResponse` via ``Client._check_response``.
+:class:`sp_api_async.base.ApiResponse` via ``Client._check_response``.
 
 * On success, the JSON body is parsed into the ``payload`` attribute.
 * If the top-level JSON is a list, it is either wrapped into ``{'payload': list}``
   or the first item is used (depending on the operation).
 * If the response contains an ``errors`` key, an appropriate
-  :class:`sp_api.base.exceptions.SellingApiException` subclass is raised
+  :class:`sp_api_async.base.exceptions.SellingApiException` subclass is raised
   based on the HTTP status.
 
-The :class:`sp_api.base.ApiResponse` object gives you:
+The :class:`sp_api_async.base.ApiResponse` object gives you:
 
 * ``payload`` – the original JSON payload
 * ``errors`` – if present
@@ -89,11 +89,11 @@ See :doc:`responses` for details.
 Credentials and marketplaces
 ----------------------------
 
-Credentials are injected by :class:`sp_api.base.credential_provider.CredentialProvider`.
+Credentials are injected by :class:`sp_api_async.base.credential_provider.CredentialProvider`.
 You generally do not need to instantiate this manually – passing ``credentials=...`` or
 setting env vars / config file is enough.
 
-Marketplaces are defined in :mod:`sp_api.base.marketplaces` and expose:
+Marketplaces are defined in :mod:`sp_api_async.base.marketplaces` and expose:
 
 * The SP-API endpoint URL
 * The marketplaceId
@@ -117,14 +117,14 @@ Two special cases:
 Retry & pagination utilities
 ----------------------------
 
-The :mod:`sp_api.util` module provides decorators that work with any async endpoint
-methods returning an :class:`sp_api.base.ApiResponse`:
+The :mod:`sp_api_async.util` module provides decorators that work with any async endpoint
+methods returning an :class:`sp_api_async.base.ApiResponse`:
 
-* :func:`sp_api.util.load_all_pages` – transforms an async function into an async generator
+* :func:`sp_api_async.util.load_all_pages` – transforms an async function into an async generator
   that automatically follows ``NextToken`` (or another token name you configure).
-* :func:`sp_api.util.throttle_retry` – retries on throttling exceptions
-  (HTTP 429 / :class:`sp_api.base.SellingApiRequestThrottledException`).
-* :func:`sp_api.util.sp_retry` – more general retry decorator.
+* :func:`sp_api_async.util.throttle_retry` – retries on throttling exceptions
+  (HTTP 429 / :class:`sp_api_async.base.SellingApiRequestThrottledException`).
+* :func:`sp_api_async.util.sp_retry` – more general retry decorator.
 
 These utilities are intentionally decoupled: you can apply them to your own
 wrappers around endpoint calls without changing the endpoint clients themselves.
@@ -133,9 +133,9 @@ All utilities support async/await patterns.
 Extending with new endpoints
 ----------------------------
 
-All endpoint clients in :mod:`sp_api.api` follow the same internal pattern:
+All endpoint clients in :mod:`sp_api_async.api` follow the same internal pattern:
 
-* A class deriving from :class:`sp_api.base.client.Client`
+* A class deriving from :class:`sp_api_async.base.client.Client`
 * One method per SP-API operation
 * A decorator (``@sp_endpoint``) capturing the path template and HTTP method
 
@@ -159,5 +159,5 @@ You may want to look at the internals when:
 * Debugging low-level issues (signature, region, marketplace routing)
 * Adapting the base client to other REST APIs
 
-For most use cases, staying at the :mod:`sp_api.api` layer plus
-:mod:`sp_api.util` is sufficient.
+For most use cases, staying at the :mod:`sp_api_async.api` layer plus
+:mod:`sp_api_async.util` is sufficient.

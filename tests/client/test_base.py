@@ -2,12 +2,12 @@ import os
 import pytest
 import httpx
 
-from sp_api.api import FulfillmentInbound
-from sp_api.base import AccessTokenClient
-from sp_api.base import Marketplaces, MissingCredentials, Client, SellingApiForbiddenException
-from sp_api.base.credential_provider import FromCodeCredentialProvider, FromEnvironmentVariablesCredentialProvider, \
+from sp_api_async.api import FulfillmentInbound
+from sp_api_async.base import AccessTokenClient
+from sp_api_async.base import Marketplaces, MissingCredentials, Client, SellingApiForbiddenException
+from sp_api_async.base.credential_provider import FromCodeCredentialProvider, FromEnvironmentVariablesCredentialProvider, \
     FromSecretsCredentialProvider, FromConfigFileCredentialProvider, required_credentials
-from sp_api.base.exceptions import MissingScopeException
+from sp_api_async.base.exceptions import MissingScopeException
 
 refresh_token = '<refresh_token>'
 lwa_app_id = '<lwa_app_id>'

@@ -3,4 +3,4 @@ VendorDirectFulfillmentPayments
 
 
     
-..  autoclass:: sp_api.api.VendorDirectFulfillmentPayments
+..  autoclass:: sp_api_async.api.VendorDirectFulfillmentPayments

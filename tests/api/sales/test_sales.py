@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 import pytest
 import pytz
 
-from sp_api.api import Sales
-from sp_api.base import Granularity
+from sp_api_async.api import Sales
+from sp_api_async.base import Granularity
 
 tz = pytz.timezone('US/Central')
 fmt = '%Y-%m-%dT%H:%M:%S%z'

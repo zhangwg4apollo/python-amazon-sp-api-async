@@ -1,7 +1,7 @@
 import pytest
 
-from sp_api.api import Finances
-from sp_api.base import SellingApiBadRequestException
+from sp_api_async.api import Finances
+from sp_api_async.base import SellingApiBadRequestException
 
 
 @pytest.mark.asyncio

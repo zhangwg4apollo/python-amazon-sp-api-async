@@ -3,4 +3,4 @@ AplusContent
 
 
 
-.. autoclass:: sp_api.api.AplusContent
+.. autoclass:: sp_api_async.api.AplusContent

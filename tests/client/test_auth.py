@@ -1,10 +1,10 @@
 import os
 import pytest
 
-from sp_api.base import AccessTokenClient
-from sp_api.base import CredentialProvider
-from sp_api.base import AuthorizationError
-from sp_api.base.credential_provider import BaseCredentialProvider
+from sp_api_async.base import AccessTokenClient
+from sp_api_async.base import CredentialProvider
+from sp_api_async.base import AuthorizationError
+from sp_api_async.base.credential_provider import BaseCredentialProvider
 
 
 refresh_token = '<refresh_token>'

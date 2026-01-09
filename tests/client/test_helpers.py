@@ -2,10 +2,10 @@ import pytest
 from datetime import datetime, timedelta
 from io import BytesIO
 
-from sp_api.api import FulfillmentInbound, Orders
-from sp_api.base import fill_query_params, sp_endpoint, create_md5, nest_dict, deprecated
-from sp_api.util import KeyMaker, load_all_pages, throttle_retry, load_date_bound
-from sp_api.util.load_all_pages import make_sleep_time
+from sp_api_async.api import FulfillmentInbound, Orders
+from sp_api_async.base import fill_query_params, sp_endpoint, create_md5, nest_dict, deprecated
+from sp_api_async.util import KeyMaker, load_all_pages, throttle_retry, load_date_bound
+from sp_api_async.util.load_all_pages import make_sleep_time
 
 key_mapping = {
     'sku': ['seller_sku', 'sellerSku'],

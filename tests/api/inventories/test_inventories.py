@@ -1,6 +1,6 @@
 import pytest
-from sp_api.api import Inventories
-from sp_api.base import SellingApiForbiddenException
+from sp_api_async.api import Inventories
+from sp_api_async.base import SellingApiForbiddenException
 
 
 @pytest.mark.asyncio

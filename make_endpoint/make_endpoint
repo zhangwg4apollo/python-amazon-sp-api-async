@@ -55,7 +55,7 @@ def make_endpoint_name(s):
 
 
 def make_directory(endpoint):
-    directory = f'./sp_api/api/{sub(endpoint)}'
+    directory = f'./sp_api_async/api/{sub(endpoint)}'
     if os.path.exists(directory):
         raise Exception('Directory exists')
     os.mkdir(directory)
@@ -84,11 +84,11 @@ from .{e}.{e} import {endpoint}
     append_template = f'''##### DO NOT DELETE ########## INSERT TITLE HERE #######
     "{endpoint}",
     '''
-    with open('./sp_api/api/__init__.py', 'r') as f:
+    with open('./sp_api_async/api/__init__.py', 'r') as f:
         content = f.read()
         content = import_template.join(content.split('##### DO NOT DELETE ########## INSERT IMPORT HERE #######'))
         content = append_template.join(content.split('##### DO NOT DELETE ########## INSERT TITLE HERE #######'))
-    with open('./sp_api/api/__init__.py', 'w+') as f1:
+    with open('./sp_api_async/api/__init__.py', 'w+') as f1:
         f1.write(content)
 
 

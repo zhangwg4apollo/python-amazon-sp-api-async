@@ -17,4 +17,4 @@ FulfillmentInbound
 
 
     
-..  autoclass:: sp_api.api.FulfillmentInbound
+..  autoclass:: sp_api_async.api.FulfillmentInbound

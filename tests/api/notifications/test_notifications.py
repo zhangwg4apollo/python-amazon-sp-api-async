@@ -1,6 +1,6 @@
 import pytest
-from sp_api.api import Notifications
-from sp_api.base import NotificationType
+from sp_api_async.api import Notifications
+from sp_api_async.base import NotificationType
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,7 @@
 import pytest
 
-from sp_api.api.shipping.shippingV2 import Shipping, AmznShippingBusiness
-from sp_api.base import SellingApiBadRequestException
+from sp_api_async.api.shipping.shippingV2 import Shipping, AmznShippingBusiness
+from sp_api_async.base import SellingApiBadRequestException
 
 
 @pytest.mark.asyncio

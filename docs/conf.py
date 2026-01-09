@@ -23,7 +23,7 @@ sys.path.insert(0, parentdir)
 
 # -- Project information -----------------------------------------------------
 
-project = 'PYTHON-AMAZON-SP-API'
+project = 'PYTHON-AMAZON-SP-API-ASYNC'
 copyright = '2025, Michael Primke'
 author = 'Michael Primke'
 
@@ -60,7 +60,7 @@ html_theme = "pydata_sphinx_theme"
 
 html_theme_options = {
     "logo": {
-        "text": "python-amazon-sp-api",
+        "text": "python-amazon-sp-api-async",
     },
     # optional tweaks
     "show_prev_next": False,

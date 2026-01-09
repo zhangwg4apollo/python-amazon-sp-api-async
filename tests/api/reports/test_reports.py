@@ -1,8 +1,8 @@
 import pytest
-from sp_api.api import Reports
-from sp_api.base import Marketplaces, Schedules, SellingApiBadRequestException, SellingApiServerException, \
+from sp_api_async.api import Reports
+from sp_api_async.base import Marketplaces, Schedules, SellingApiBadRequestException, SellingApiServerException, \
     ProcessingStatus
-from sp_api.base.reportTypes import ReportType
+from sp_api_async.base.reportTypes import ReportType
 
 
 @pytest.mark.asyncio

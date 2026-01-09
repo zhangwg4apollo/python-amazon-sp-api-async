@@ -3,6 +3,6 @@ Products
 
 
 
-..  autoclass:: sp_api.api.Products
+..  autoclass:: sp_api_async.api.Products
 
 

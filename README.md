@@ -1,7 +1,7 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/saleweaver/python-amazon-sp-api/badge)](https://www.codefactor.io/repository/github/saleweaver/python-amazon-sp-api)
-[![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api)](https://pepy.tech/project/python-amazon-sp-api)
-[![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api/month)](https://pepy.tech/project/python-amazon-sp-api)
-[![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api/week)](https://pepy.tech/project/python-amazon-sp-api)
+[![CodeFactor](https://www.codefactor.io/repository/github/zhangwg4apollo/python-amazon-sp-api-async/badge)](https://www.codefactor.io/repository/github/zhangwg4apollo/python-amazon-sp-api-async)
+[![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api-async)](https://pepy.tech/project/python-amazon-sp-api-async)
+[![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api-async/month)](https://pepy.tech/project/python-amazon-sp-api-async)
+[![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api-async/week)](https://pepy.tech/project/python-amazon-sp-api-async)
 
 # PYTHON-AMAZON-SP-API-ASYNC
 
@@ -83,16 +83,14 @@ Your support helps keep the project alive and evolving, and is greatly appreciat
 
 ### Documentation
 
-Documentation is available [here](https://python-amazon-sp-api.readthedocs.io/en/latest/)
-
-[![Documentation Status](https://img.shields.io/readthedocs/python-amazon-sp-api?style=for-the-badge)](https://python-amazon-sp-api.readthedocs.io/en/latest/index.html)
+Documentation is available [here](https://github.com/zhangwg4apollo/python-amazon-sp-api-async)
 
 
 ### Q & A
 
 If you have questions, please ask them in GitHub discussions 
 
-[![discussions](https://img.shields.io/badge/github-discussions-brightgreen?style=for-the-badge&logo=github)](https://github.com/saleweaver/python-amazon-sp-api/discussions)
+[![discussions](https://img.shields.io/badge/github-discussions-brightgreen?style=for-the-badge&logo=github)](https://github.com/zhangwg4apollo/python-amazon-sp-api-async/discussions)
 
 or
 
@@ -117,7 +115,7 @@ pip install "python-amazon-sp-api-async[aws]"
 pip install "python-amazon-sp-api-async[aws-caching]"
 
 # Install from source
-git clone https://github.com/your-username/python-amazon-sp-api-async.git
+git clone https://github.com/zhangwg4apollo/python-amazon-sp-api-async.git
 cd python-amazon-sp-api-async
 uv pip install -e .
 ```
@@ -127,12 +125,12 @@ uv pip install -e .
 
 ```python
 import asyncio
-from sp_api.api import Orders
-from sp_api.api import Reports
-from sp_api.api import DataKiosk
-from sp_api.api import Feeds
-from sp_api.base import SellingApiException
-from sp_api.base.reportTypes import ReportType
+from sp_api_async.api import Orders
+from sp_api_async.api import Reports
+from sp_api_async.api import DataKiosk
+from sp_api_async.api import Feeds
+from sp_api_async.base import SellingApiException
+from sp_api_async.base.reportTypes import ReportType
 from datetime import datetime, timedelta
 
 async def main():
@@ -205,6 +203,7 @@ This project follows the same MIT license as the original project.
 
 ### 📚 Related Links
 
+- **This Repository**: [python-amazon-sp-api-async](https://github.com/zhangwg4apollo/python-amazon-sp-api-async)
 - **Original Repository**: [python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api)
 - **Original Documentation**: [python-amazon-sp-api.readthedocs.io](https://python-amazon-sp-api.readthedocs.io/en/latest/)
 - **Original PyPI Package**: [python-amazon-sp-api](https://pypi.org/project/python-amazon-sp-api/)

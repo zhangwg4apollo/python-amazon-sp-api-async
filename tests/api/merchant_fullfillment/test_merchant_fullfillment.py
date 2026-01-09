@@ -1,7 +1,7 @@
 import pytest
 
-from sp_api.api.merchant_fulfillment.merchant_fulfillment import MerchantFulfillment
-from sp_api.base import SellingApiForbiddenException, SellingApiBadRequestException
+from sp_api_async.api.merchant_fulfillment.merchant_fulfillment import MerchantFulfillment
+from sp_api_async.base import SellingApiForbiddenException, SellingApiBadRequestException
 
 
 @pytest.mark.asyncio

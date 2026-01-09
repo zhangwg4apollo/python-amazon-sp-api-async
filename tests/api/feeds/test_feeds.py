@@ -1,7 +1,7 @@
 import pytest
-from sp_api.api import FeedsV2 as Feeds
-from sp_api.base import SellingApiBadRequestException, SellingApiServerException, SellingApiForbiddenException
-from sp_api.base.feedTypes import FeedType
+from sp_api_async.api import FeedsV2 as Feeds
+from sp_api_async.base import SellingApiBadRequestException, SellingApiServerException, SellingApiForbiddenException
+from sp_api_async.base.feedTypes import FeedType
 
 
 @pytest.mark.asyncio

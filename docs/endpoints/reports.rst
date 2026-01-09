@@ -3,4 +3,4 @@ Reports
 
 
 
-..  autoclass:: sp_api.api.Reports
+..  autoclass:: sp_api_async.api.Reports

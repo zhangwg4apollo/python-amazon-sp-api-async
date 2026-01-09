@@ -3,6 +3,6 @@ Authorization
     
 
 
-..  autoclass:: sp_api.api.Authorization
+..  autoclass:: sp_api_async.api.Authorization
 
 

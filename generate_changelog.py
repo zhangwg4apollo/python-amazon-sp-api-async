@@ -1,7 +1,7 @@
 import sys
 import os
 import openai
-from sp_api.__version__ import __version__
+from sp_api_async.__version__ import __version__
 
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -15,7 +15,7 @@ with open(diff_file, 'r') as f:
     diff = f.read()
 
 prompt = f"""
-You are a helpful assistant who generates changelog entries for the python-amazon-sp-api, a wrapper to access Amazon's Selling Partner API with an easy-to-use interface. This tool helps developers and businesses connect seamlessly with Amazon's vast marketplace, enabling powerful automations and data management.
+You are a helpful assistant who generates changelog entries for the python-amazon-sp-api-async, an async wrapper to access Amazon's Selling Partner API with an easy-to-use async/await interface. This tool helps developers and businesses connect seamlessly with Amazon's vast marketplace, enabling powerful automations and data management.
 This is a growing changelog entry for the project. Only add changes that are relevant to the end-users, such as new features, changes to existing features, and bug fixes. Categorize and group changes between internal and relevant to the project..
 The current version is {__version__}. Add this to the Changelog header. Never include dates or release status in the changelog entry.
 

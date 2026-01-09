@@ -3,4 +3,4 @@ CatalogItems
 
 
     
-.. autoclass:: sp_api.api.CatalogItems
+.. autoclass:: sp_api_async.api.CatalogItems

@@ -1,6 +1,6 @@
 import pytest
-from sp_api.api import Catalog
-from sp_api.base import SellingApiBadRequestException, ApiResponse
+from sp_api_async.api import Catalog
+from sp_api_async.base import SellingApiBadRequestException, ApiResponse
 
 
 @pytest.mark.asyncio

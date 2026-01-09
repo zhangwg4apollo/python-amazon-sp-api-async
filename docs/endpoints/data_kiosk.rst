@@ -2,4 +2,4 @@ Data Kiosk
 =============
 
     
-..  autoclass:: sp_api.api.DataKiosk
+..  autoclass:: sp_api_async.api.DataKiosk

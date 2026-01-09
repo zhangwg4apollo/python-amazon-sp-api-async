@@ -14,7 +14,7 @@ To use the latest version available, you can use the `LATEST` enum.
 
 .. code-block:: python
 
-    from sp_api.api import CatalogItems, CatalogItemsVersion
+    from sp_api_async.api import CatalogItems, CatalogItemsVersion
 
     async with CatalogItems(version=CatalogItemsVersion.LATEST) as client:
         ...

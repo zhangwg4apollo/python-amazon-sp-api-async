@@ -10,7 +10,8 @@ readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
 authors = [
-    {name = "Michael Primke", email = "primke.michael@gmail.com"}
+    {name = "Michael Primke", email = "primke.michael@gmail.com"},
+    {name = "zhang wenguang", email = "zwgmlr3@gmail.com"}
 ]
 keywords = ["amazon", "sp-api", "selling-partner-api", "amazon-api", "marketplace", "async", "asyncio", "httpx"]
 classifiers = [
@@ -42,11 +43,11 @@ aws-caching = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/saleweaver/python-amazon-sp-api"
-Documentation = "https://python-amazon-sp-api.readthedocs.io/en/latest/"
-Repository = "https://github.com/saleweaver/python-amazon-sp-api"
-Issues = "https://github.com/saleweaver/python-amazon-sp-api/issues"
-Discussions = "https://github.com/saleweaver/python-amazon-sp-api/discussions"
+Homepage = "https://github.com/zhangwg4apollo/python-amazon-sp-api-async"
+Documentation = "https://github.com/zhangwg4apollo/python-amazon-sp-api-async"
+Repository = "https://github.com/zhangwg4apollo/python-amazon-sp-api-async"
+Issues = "https://github.com/zhangwg4apollo/python-amazon-sp-api-async/issues"
+Discussions = "https://github.com/zhangwg4apollo/python-amazon-sp-api-async/discussions"
 
 [dependency-groups]
 dev = [
@@ -73,10 +74,10 @@ docs = [
 ]
 
 [tool.setuptools]
-packages = ["sp_api"]
+packages = {find = {}}
 
 [tool.setuptools.dynamic]
-version = {attr = "sp_api.__version__.__version__"}
+version = {attr = "sp_api_async.__version__.__version__"}
 
 [tool.ruff]
 line-length = 120
@@ -87,4 +88,4 @@ select = ["E", "F", "W", "I", "N", "UP"]
 ignore = []
 
 [tool.ruff.lint.isort]
-known-first-party = ["sp_api"]
+known-first-party = ["sp_api_async"]

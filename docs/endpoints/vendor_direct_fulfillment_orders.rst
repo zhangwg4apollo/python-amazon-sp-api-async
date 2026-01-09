@@ -3,4 +3,4 @@ VendorDirectFulfillmentOrders
     
 
 
-..  autoclass:: sp_api.api.VendorDirectFulfillmentOrders
+..  autoclass:: sp_api_async.api.VendorDirectFulfillmentOrders

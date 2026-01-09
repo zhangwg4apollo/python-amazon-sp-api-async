@@ -1,5 +1,5 @@
 import pytest
-from sp_api.api import ListingsRestrictions
+from sp_api_async.api import ListingsRestrictions
 
 
 @pytest.mark.asyncio

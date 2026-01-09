@@ -1,68 +1,68 @@
 Enums
 ======
 
-..  autoclass:: sp_api.base.Marketplaces
+..  autoclass:: sp_api_async.base.Marketplaces
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.FeedTypes
+..  autoclass:: sp_api_async.base.FeedTypes
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.FulfillmentChannels
+..  autoclass:: sp_api_async.base.FulfillmentChannels
     :show-inheritance:
 
-..  autoclass:: sp_api.base.IdentifiersType
-    :show-inheritance:
-
-
-..  autoclass:: sp_api.base.IncludedData
+..  autoclass:: sp_api_async.base.IdentifiersType
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.ListingItemsIncludedData
+..  autoclass:: sp_api_async.base.IncludedData
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.CatalogItemsIncludedData
+..  autoclass:: sp_api_async.base.ListingItemsIncludedData
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.IneligibilityReasonList
+..  autoclass:: sp_api_async.base.CatalogItemsIncludedData
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.InventoryGranularity
-    :show-inheritance:
-
-..  autoclass:: sp_api.base.NotificationType
-    :show-inheritance:
-
-..  autoclass:: sp_api.base.ProcessingStatus
+..  autoclass:: sp_api_async.base.IneligibilityReasonList
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.ReportStatus
+..  autoclass:: sp_api_async.base.InventoryGranularity
+    :show-inheritance:
+
+..  autoclass:: sp_api_async.base.NotificationType
+    :show-inheritance:
+
+..  autoclass:: sp_api_async.base.ProcessingStatus
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.ReportType
+..  autoclass:: sp_api_async.base.ReportStatus
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.Granularity
+..  autoclass:: sp_api_async.base.ReportType
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.BuyerType
+..  autoclass:: sp_api_async.base.Granularity
     :show-inheritance:
 
 
-..  autoclass:: sp_api.base.FirstDayOfWeek
+..  autoclass:: sp_api_async.base.BuyerType
     :show-inheritance:
 
-..  autoclass:: sp_api.base.Schedules
+
+..  autoclass:: sp_api_async.base.FirstDayOfWeek
     :show-inheritance:
 
-..  autoclass:: sp_api.base.AwsEnv
+..  autoclass:: sp_api_async.base.Schedules
+    :show-inheritance:
+
+..  autoclass:: sp_api_async.base.AwsEnv
     :show-inheritance:

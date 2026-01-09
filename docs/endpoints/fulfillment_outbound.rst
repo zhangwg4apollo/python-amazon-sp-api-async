@@ -3,4 +3,4 @@ FulfillmentOutbound
 
 
     
-..  autoclass:: sp_api.api.FulfillmentOutbound
+..  autoclass:: sp_api_async.api.FulfillmentOutbound

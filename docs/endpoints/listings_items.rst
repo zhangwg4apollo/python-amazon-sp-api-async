@@ -2,4 +2,4 @@ ListingsItems
 =============
     
 
-..  autoclass:: sp_api.api.ListingsItems
+..  autoclass:: sp_api_async.api.ListingsItems
