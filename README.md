@@ -3,11 +3,50 @@
 [![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api/month)](https://pepy.tech/project/python-amazon-sp-api)
 [![Downloads](https://static.pepy.tech/badge/python-amazon-sp-api/week)](https://pepy.tech/project/python-amazon-sp-api)
 
-# PYTHON-AMAZON-SP-API
+# PYTHON-AMAZON-SP-API-ASYNC
 
-## Amazon Selling-Partner API
+## Amazon Selling-Partner API (Async Fork)
 
-A wrapper to access **Amazon's Selling Partner API** with an easy-to-use interface.
+> **Note**: This is an async fork modified from [python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api).
+
+A wrapper to access **Amazon's Selling Partner API** with an easy-to-use async/await interface.
+
+### ⚠️ Warning
+
+> **⚠️ Important Notice**:
+> 
+> - This project has **not been rigorously tested** and is provided as-is. Use at your own risk.
+> - If the original repository ([python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api)) implements async support in the future, this fork will become **obsolete** and should no longer be used.
+> - Please monitor the original repository for official async support and migrate to it when available.
+
+### 🙏 Acknowledgments
+
+This project is based on [python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api) with modifications. Special thanks to:
+
+- **Original Author**: [@saleweaver](https://github.com/saleweaver) (Michael Primke)
+- **Original Repository**: [python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api)
+- **Original Contributors**: Thanks to all developers who contributed to the original project
+
+This fork version has been refactored for async/await support based on the original project, but the core architecture and API design philosophy are derived from the original project. If you find this project useful, please consider supporting the original project as well.
+
+### 🔄 Key Changes
+
+Main improvements in this fork compared to the original version:
+
+- **✨ Full Async Support**: All API calls use `async/await` pattern, implemented with `httpx` for better concurrency performance
+- **📦 Modern Build System**: Migrated to `pyproject.toml` and `uv` package manager for simplified dependency management
+- **🐍 Python 3.13+**: Requires Python 3.13 or higher to leverage the latest language features
+- **⚡ Performance Optimization**: Async I/O support, ideal for high-concurrency scenarios
+
+### 📋 Differences from Original
+
+| Feature | Original | This Fork |
+|---------|----------|-----------|
+| HTTP Client | `requests` (sync) | `httpx` (async) |
+| API Call Pattern | Synchronous | `async/await` |
+| Package Name | `python-amazon-sp-api` | `python-amazon-sp-api-async` |
+| Python Version | >= 3.9 | >= 3.13 |
+| Package Management | `setup.py` / `requirements.txt` | `pyproject.toml` / `uv` |
 
 ---
 
@@ -61,11 +100,26 @@ or
 
 
 ### Installation
-[![Badge](https://img.shields.io/pypi/v/python-amazon-sp-api?style=for-the-badge)](https://pypi.org/project/python-amazon-sp-api/)
-```
-pip install python-amazon-sp-api
-pip install "python-amazon-sp-api[aws]" # if you want to use AWS Secret Manager Authentication.
-pip install "python-amazon-sp-api[aws-caching]" # if you want to use the Cached Secrets from AWS
+
+> **Note**: This fork version may not be published to PyPI yet. Please use the following installation methods:
+
+```bash
+# Using uv (recommended)
+uv pip install python-amazon-sp-api-async
+
+# Or using pip
+pip install python-amazon-sp-api-async
+
+# If you need AWS Secret Manager authentication support
+pip install "python-amazon-sp-api-async[aws]"
+
+# If you need AWS cached secrets support
+pip install "python-amazon-sp-api-async[aws-caching]"
+
+# Install from source
+git clone https://github.com/your-username/python-amazon-sp-api-async.git
+cd python-amazon-sp-api-async
+uv pip install -e .
 ```
 
 ---
@@ -144,6 +198,16 @@ We are not affiliated with Amazon
 ### LICENSE
 
 ![License](https://img.shields.io/github/license/saleweaver/python-amazon-sp-api?style=for-the-badge)
+
+This project follows the same MIT license as the original project.
+
+---
+
+### 📚 Related Links
+
+- **Original Repository**: [python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api)
+- **Original Documentation**: [python-amazon-sp-api.readthedocs.io](https://python-amazon-sp-api.readthedocs.io/en/latest/)
+- **Original PyPI Package**: [python-amazon-sp-api](https://pypi.org/project/python-amazon-sp-api/)
 
 ---
 

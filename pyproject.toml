@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-amazon-sp-api-async"
+description = "Python async wrapper for the Amazon Selling-Partner API"
+dynamic = ["version"]
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+authors = [
+    {name = "Michael Primke", email = "primke.michael@gmail.com"}
+]
+keywords = ["amazon", "sp-api", "selling-partner-api", "amazon-api", "marketplace", "async", "asyncio", "httpx"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+    "cachetools>=4.2",
+    "confuse>=1.4",
+    "httpx>=0.27.0",
+    "jinja2>=3.1.6",
+    "pytz>=2021.1",
+]
+
+[project.optional-dependencies]
+aws = [
+    "boto3>=1.17.0",
+]
+aws-caching = [
+    "aws-secretsmanager-caching",
+    "boto3>=1.17.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/saleweaver/python-amazon-sp-api"
+Documentation = "https://python-amazon-sp-api.readthedocs.io/en/latest/"
+Repository = "https://github.com/saleweaver/python-amazon-sp-api"
+Issues = "https://github.com/saleweaver/python-amazon-sp-api/issues"
+Discussions = "https://github.com/saleweaver/python-amazon-sp-api/discussions"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.14.11",
+]
+docs = [
+    "sphinx_rtd_theme",
+    "point",
+    "pytest",
+    "requests>=2.32.5",
+    "boto3>=1.42.24",
+    "cachetools>=5.5.2",
+    "setuptools>=80.9.0",
+    "pytz>=2025.1",
+    "confuse>=2.1.0",
+    "jinja2",
+    "sphinxcontrib-napoleon",
+    "sphinx-jinja2-compat>=0.1.1",
+    "sphinx-toolbox>=2.16.0",
+    "enum-tools[sphinx]",
+    "pydata-sphinx-theme",
+]
+
+[tool.setuptools]
+packages = ["sp_api"]
+
+[tool.setuptools.dynamic]
+version = {attr = "sp_api.__version__.__version__"}
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["sp_api"]

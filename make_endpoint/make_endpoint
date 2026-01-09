@@ -44,7 +44,6 @@ def make_py(endpoint, operations, description, directory):
 
     with open(os.path.join(directory, f'{sub(endpoint)}.py'), 'w+') as f:
         f.write(out)
-    f.close()
 
 
 def sub(e):
@@ -89,24 +88,8 @@ from .{e}.{e} import {endpoint}
         content = f.read()
         content = import_template.join(content.split('##### DO NOT DELETE ########## INSERT IMPORT HERE #######'))
         content = append_template.join(content.split('##### DO NOT DELETE ########## INSERT TITLE HERE #######'))
-    f.close()
     with open('./sp_api/api/__init__.py', 'w+') as f1:
         f1.write(content)
-    f1.close()
-
-
-def add_to_setup_py(endpoint):
-    package = f"'sp_api.api.{sub(endpoint)}'"
-    append_template = f"""##### DO NOT DELETE ########## INSERT PACKAGE HERE #######
-              {package},
-    """
-    with open('./setup.py', 'r') as f:
-        content = f.read()
-        content = append_template.join(content.split('##### DO NOT DELETE ########## INSERT PACKAGE HERE #######'))
-    f.close()
-    with open('./setup.py', 'w+') as f1:
-        f1.write(content)
-    f1.close()
 
 
 def create_endpoint_file(model_json):
@@ -133,7 +116,6 @@ def create_endpoint_file(model_json):
 
     make_py(endpoint, operations, model.get('info').get('description'), directory)
     add_to_init(endpoint)
-    add_to_setup_py(endpoint)
 
 
 def get_endpoint_from_url(url):
