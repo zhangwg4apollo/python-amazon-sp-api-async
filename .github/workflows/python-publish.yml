@@ -24,7 +24,7 @@ jobs:
       with:
         python-version: '3.13'
     - name: Install build dependencies
-      run: uv pip install twine
+      run: uv pip install --system twine
     - name: Build package
       run: uv build
     - name: Publish to PyPI
