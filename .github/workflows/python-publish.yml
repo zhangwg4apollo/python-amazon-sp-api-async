@@ -8,6 +8,7 @@ on:
     types: [created]
   repository_dispatch:
     types: [release_created]
+  workflow_dispatch:
 jobs:
   deploy:
 
