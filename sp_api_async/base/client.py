@@ -155,12 +155,12 @@ class Client(BaseClient):
         if (self.method == "DELETE" or res_no_data) and 200 <= res.status_code < 300:
             try:
                 js = res.json() or {}
-            except (ValueError, httpx.DecodeError):
+            except (ValueError, httpx.DecodingError):
                 js = {"status_code": res.status_code}
         else:
             try:
                 js = res.json() or {}
-            except (ValueError, httpx.DecodeError):
+            except (ValueError, httpx.DecodingError):
                 js = {}
 
         log.debug("Response before list handling: %s", js)

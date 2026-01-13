@@ -103,7 +103,7 @@ or
 
 ```bash
 # Using uv (recommended)
-uv pip install python-amazon-sp-api-async
+uv add python-amazon-sp-api-async
 
 # Or using pip
 pip install python-amazon-sp-api-async
@@ -117,7 +117,7 @@ pip install "python-amazon-sp-api-async[aws-caching]"
 # Install from source
 git clone https://github.com/zhangwg4apollo/python-amazon-sp-api-async.git
 cd python-amazon-sp-api-async
-uv pip install -e .
+uv add -e .
 ```
 
 ---
