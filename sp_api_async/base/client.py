@@ -185,7 +185,7 @@ class Client(BaseClient):
 
     def _add_marketplaces(self, data):
         POST = ["marketplaceIds", "MarketplaceIds"]
-        GET = ["MarketplaceId", "MarketplaceIds", "marketplace_ids", "marketplaceIds"]
+        GET = ["MarketplaceId", "MarketplaceIds", "marketplace_ids", "marketplaceIds", "marketplaceId"]
 
         if self.method == "POST":
             if any(x in data.keys() for x in POST):
