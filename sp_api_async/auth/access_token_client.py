@@ -3,15 +3,12 @@ import os
 import httpx
 import hashlib
 import logging
-from cachetools import TTLCache
 from sp_api_async.base import BaseClient
 
 from .credentials import Credentials
 from .access_token_response import AccessTokenResponse
 from .exceptions import AuthorizationError
-
-cache = TTLCache(maxsize=int(os.environ.get('SP_API_AUTH_CACHE_SIZE', 10)), ttl=int(os.environ.get('SP_API_AUTH_CACHE_TTL', 3200)))
-grantless_cache = TTLCache(maxsize=int(os.environ.get('SP_API_AUTH_CACHE_SIZE', 10)), ttl=int(os.environ.get('SP_API_AUTH_CACHE_TTL', 3200)))
+from .cache_manager import get_cache_manager
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +23,12 @@ class AccessTokenClient(BaseClient):
         self.proxies = proxies
         self.verify = verify
         self._client = httpx.AsyncClient(proxy=proxies, verify=verify)
+        
+        # 创建缓存实例（单例模式，相同配置会共享同一实例）
+        cache_size = int(os.environ.get('SP_API_AUTH_CACHE_SIZE', 100))
+        cache_ttl = int(os.environ.get('SP_API_AUTH_CACHE_TTL', 3200))
+        self._cache = get_cache_manager(maxsize=cache_size, ttl=cache_ttl, cache_name='access_token')
+        self._grantless_cache = get_cache_manager(maxsize=cache_size, ttl=cache_ttl, cache_name='grantless_token')
 
     async def _request(self, url, data, headers):
         response = await self._client.post(url, data=data, headers=headers)
@@ -52,12 +55,11 @@ class AccessTokenClient(BaseClient):
         """
 
         cache_key = self._get_cache_key()
-        try:
-            access_token = cache[cache_key]
-        except KeyError:
+        access_token = self._cache.get(cache_key)
+        if access_token is None:
             request_url = self.scheme + self.host + self.path
             access_token = await self._request(request_url, self.data, self.headers)
-            cache[cache_key] = access_token
+            self._cache.set(cache_key, access_token)
         return AccessTokenResponse(**access_token)
 
     async def get_grantless_auth(self, scope='sellingpartnerapi::notifications'):
@@ -75,12 +77,9 @@ class AccessTokenClient(BaseClient):
         &client_secret=Y76SDl2F
         :return: AccessTokenResponse
         """
-        global grantless_cache
         cache_key = self._get_cache_key(scope)
-        try:
-            access_token = grantless_cache[cache_key]
-            logger.debug('from_cache. scope: %s', scope)
-        except KeyError:
+        access_token = self._grantless_cache.get(cache_key)
+        if access_token is None:
             request_url = self.scheme + self.host + self.path
             access_token = await self._request(
                 request_url,
@@ -88,8 +87,10 @@ class AccessTokenClient(BaseClient):
                 headers=self.headers
             )
             logger.debug('token_refreshed')
-            grantless_cache.clear()
-            grantless_cache[cache_key] = access_token
+            self._grantless_cache.clear()
+            self._grantless_cache.set(cache_key, access_token)
+        else:
+            logger.debug('from_cache. scope: %s', scope)
 
         return AccessTokenResponse(**access_token)
 

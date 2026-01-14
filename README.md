@@ -50,6 +50,47 @@ Main improvements in this fork compared to the original version:
 
 ---
 
+### 🚀 New Features in This Fork
+
+This section lists additional features and improvements added specifically in this fork:
+
+#### 💾 Flexible Cache Manager
+
+A flexible cache manager system has been added to improve token caching efficiency:
+
+- **Dual Cache Modes**: Supports both memory cache (using `cachetools`) and disk cache (using `diskcache` as optional dependency)
+- **Smart Fallback**: Automatically falls back to memory cache if `diskcache` is not installed
+- **Configurable**: Control cache behavior via environment variables or function parameters
+- **Singleton Pattern**: Reuses cache instances with the same configuration
+
+**Installation**:
+```bash
+# Optional: Install diskcache for persistent disk caching
+uv add diskcache
+```
+
+**Configuration**:
+- `SP_API_CACHE_TYPE`: Cache type (`memory` or `disk`, default: `disk` if diskcache installed, else `memory`)
+- `SP_API_CACHE_DIR`: Disk cache directory (default: `~/.sp_api_cache`)
+- `SP_API_AUTH_CACHE_SIZE`: Cache size (default: `100`)
+- `SP_API_AUTH_CACHE_TTL`: Cache TTL in seconds (default: `3200`)
+
+**Usage**:
+The cache manager is automatically used by `AccessTokenClient` for token caching. You can also use it directly:
+
+```python
+from sp_api_async.auth.cache_manager import get_cache_manager
+
+# Auto-select cache type based on available dependencies
+cache = get_cache_manager(cache_name='my_cache')
+
+# Explicitly specify cache type
+cache = get_cache_manager(cache_type='memory', cache_name='token_cache')
+cache = get_cache_manager(cache_type='disk', cache_name='token_cache')  # Requires diskcache
+```
+
+---
+
 ### SP-API fees & call optimization
 
 With Amazon’s new SP-API pricing model (annual fees plus usage-based charges for GET requests), inefficient integrations will quickly become costly. If your systems rely on `python-amazon-sp-api` and you want to control these expenses, I offer consulting to review and optimize your implementation—such as replacing high-volume Orders API polling with report-based workflows and reducing unnecessary GET traffic wherever possible. If you’d like expert support preparing your SP-API usage for the upcoming pricing changes, feel free to get in touch.
