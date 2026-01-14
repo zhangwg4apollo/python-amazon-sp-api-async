@@ -109,7 +109,8 @@ class DiskCache(BaseCache):
             raise ImportError("diskcache is not installed. Install it with: uv add diskcache")
 
         cache_dir = os.environ.get("SP_API_CACHE_DIR", str(Path.home() / ".sp_api_cache"))
-        cache_path = Path(cache_dir) / cache_name
+        # 在路径中包含 maxsize 和 ttl 以确保不同配置的实例使用不同的磁盘路径
+        cache_path = Path(cache_dir) / cache_name / f"maxsize_{maxsize}_ttl_{ttl}"
         cache_path.mkdir(parents=True, exist_ok=True)
         self._cache = diskcache.Cache(str(cache_path), size_limit=maxsize * 1024 * 1024)
         self._ttl = ttl
