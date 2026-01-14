@@ -25,7 +25,7 @@ class AccessTokenClient(BaseClient):
         self._client = httpx.AsyncClient(proxy=proxies, verify=verify)
         
         # 创建缓存实例（单例模式，相同配置会共享同一实例）
-        cache_size = int(os.environ.get('SP_API_AUTH_CACHE_SIZE', 10))
+        cache_size = int(os.environ.get('SP_API_AUTH_CACHE_SIZE', 100))
         cache_ttl = int(os.environ.get('SP_API_AUTH_CACHE_TTL', 3200))
         self._cache = get_cache_manager(maxsize=cache_size, ttl=cache_ttl, cache_name='access_token')
         self._grantless_cache = get_cache_manager(maxsize=cache_size, ttl=cache_ttl, cache_name='grantless_token')
