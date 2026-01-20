@@ -11,13 +11,25 @@
 
 A wrapper to access **Amazon's Selling Partner API** with an easy-to-use async/await interface.
 
+### 📢 Important Notice
+
+> **📢 重要通知**:
+> 
+> **原仓库 [python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api) 现已支持异步功能！**
+> 
+> 原仓库已添加了异步支持，使用 `sp_api.asyncio.api` 模块，基于 `httpx` 实现。建议优先考虑使用原仓库的官方异步实现。
+> 
+> 如果您正在寻找异步支持，请先查看原仓库的异步功能是否满足您的需求：
+> - 原仓库异步模块：`sp_api.asyncio.api`
+> - 原仓库 README：https://github.com/saleweaver/python-amazon-sp-api/blob/master/README.md
+
 ### ⚠️ Warning
 
 > **⚠️ Important Notice**:
 > 
 > - This project has **not been rigorously tested** and is provided as-is. Use at your own risk.
-> - If the original repository ([python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api)) implements async support in the future, this fork will become **obsolete** and should no longer be used.
-> - Please monitor the original repository for official async support and migrate to it when available.
+> - **The original repository ([python-amazon-sp-api](https://github.com/saleweaver/python-amazon-sp-api)) has already implemented async support.** This fork may become **obsolete** and should be evaluated against the official implementation.
+> - Please consider using the official async support from the original repository first.
 
 ### 🙏 Acknowledgments
 
